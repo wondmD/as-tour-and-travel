@@ -99,7 +99,7 @@ export function DestinationDetails({ destination, dark = false }: DestinationDet
 
   return (
     <div
-      className={`overflow-hidden rounded-[22px] ring-1 ${
+      className={`overflow-hidden rounded-[18px] ring-1 sm:rounded-[22px] ${
         dark
           ? "bg-slate-900 ring-indigo-400/20"
           : "bg-surface ring-border/60 shadow-xl shadow-primary/5"
@@ -132,7 +132,7 @@ export function DestinationDetails({ destination, dark = false }: DestinationDet
 
       {/* Tabs */}
       <div
-        className={`flex gap-1 overflow-x-auto border-b px-3 py-2 scrollbar-none md:px-4 ${
+        className={`flex gap-1 overflow-x-auto border-b px-2 py-2 scrollbar-none sm:px-3 md:px-4 ${
           dark ? "border-white/10 bg-slate-900/80" : "border-border/60 bg-surface/95"
         }`}
       >
@@ -143,7 +143,7 @@ export function DestinationDetails({ destination, dark = false }: DestinationDet
               key={id}
               type="button"
               onClick={() => setActiveTab(id)}
-              className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-colors md:px-4 ${
+              className={`flex shrink-0 items-center gap-1.5 rounded-xl px-2.5 py-2.5 text-xs font-semibold transition-colors sm:gap-2 sm:px-3 sm:py-2 sm:text-sm md:px-4 ${
                 isActive
                   ? dark
                     ? "bg-indigo-500/20 text-indigo-200"
@@ -161,7 +161,7 @@ export function DestinationDetails({ destination, dark = false }: DestinationDet
       </div>
 
       {/* Tab panels */}
-      <div className={`px-4 py-5 md:px-6 md:py-6 ${dark ? "text-white" : ""}`}>
+      <div className={`px-3 py-4 sm:px-4 sm:py-5 md:px-6 md:py-6 ${dark ? "text-white" : ""}`}>
         <AnimatePresence mode="wait">
           {activeTab === "overview" && (
             <motion.div
@@ -264,16 +264,16 @@ export function DestinationDetails({ destination, dark = false }: DestinationDet
                           style={{
                             backgroundColor:
                               color === "primary"
-                                ? "rgba(15,108,189,0.1)"
+                                ? "rgba(48,112,130,0.1)"
                                 : color === "secondary"
-                                  ? "rgba(16,185,129,0.1)"
-                                  : "rgba(249,115,22,0.1)",
+                                  ? "rgba(108,163,162,0.1)"
+                                  : "rgba(234,153,64,0.1)",
                             color:
                               color === "primary"
-                                ? "#0F6CBD"
+                                ? "#307082"
                                 : color === "secondary"
-                                  ? "#10B981"
-                                  : "#F97316",
+                                  ? "#6CA3A2"
+                                  : "#EA9940",
                           }}
                         >
                           <Icon className="h-4 w-4" />

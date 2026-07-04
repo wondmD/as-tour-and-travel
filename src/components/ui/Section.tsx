@@ -40,7 +40,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`relative overflow-hidden py-20 md:py-28 ${toneMap[tone]} ${patternMap[pattern]} ${mesh ? "mesh-blobs" : ""} ${className}`}
+      className={`relative overflow-hidden py-14 md:py-20 lg:py-28 ${toneMap[tone]} ${patternMap[pattern]} ${mesh ? "mesh-blobs" : ""} ${className}`}
     >
       <div className={`relative z-10 mx-auto max-w-7xl px-4 md:px-6 lg:px-8 ${containerClassName}`}>
         {children}

@@ -26,8 +26,8 @@ export function TrustRibbon({ compact = false }: { compact?: boolean }) {
       <div
         className={
           compact
-            ? "grid max-w-xl grid-cols-2 gap-x-4 gap-y-3"
-            : "mx-auto grid max-w-2xl grid-cols-2 gap-x-6 gap-y-3 px-4 py-4 md:px-6"
+            ? "mt-6 grid max-w-xl grid-cols-1 gap-y-2.5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-3"
+            : "mx-auto grid max-w-2xl grid-cols-1 gap-y-3 px-4 py-4 sm:grid-cols-2 sm:gap-x-6 md:px-6"
         }
       >
         {items.map(({ icon: Icon, label }) => (

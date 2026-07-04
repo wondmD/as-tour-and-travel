@@ -29,7 +29,7 @@ interface RouteMapLeafletProps {
 function createStopIcon(day: number) {
   return L.divIcon({
     className: "leaflet-stop-icon-wrapper",
-    html: `<div class="leaflet-stop-icon" style="background:#0F6CBD;box-shadow:0 0 0 4px rgba(15,108,189,0.25)"><span>${day}</span></div>`,
+    html: `<div class="leaflet-stop-icon" style="background:#307082;box-shadow:0 0 0 4px rgba(48,112,130,0.25)"><span>${day}</span></div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
   });
@@ -40,16 +40,16 @@ function createCarIcon(bearing: number) {
     className: "leaflet-car-icon-wrapper",
     html: `<div class="leaflet-car-icon" style="transform:rotate(${bearing}deg)">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <rect x="7" y="9" width="3.5" height="7" rx="1.2" fill="#1e293b"/>
-        <rect x="21.5" y="9" width="3.5" height="7" rx="1.2" fill="#1e293b"/>
-        <rect x="7" y="18" width="3.5" height="7" rx="1.2" fill="#1e293b"/>
-        <rect x="21.5" y="18" width="3.5" height="7" rx="1.2" fill="#1e293b"/>
-        <rect x="10" y="5" width="12" height="22" rx="4" fill="#F97316" stroke="#ffffff" stroke-width="1.5"/>
+        <rect x="7" y="9" width="3.5" height="7" rx="1.2" fill="#12212E"/>
+        <rect x="21.5" y="9" width="3.5" height="7" rx="1.2" fill="#12212E"/>
+        <rect x="7" y="18" width="3.5" height="7" rx="1.2" fill="#12212E"/>
+        <rect x="21.5" y="18" width="3.5" height="7" rx="1.2" fill="#12212E"/>
+        <rect x="10" y="5" width="12" height="22" rx="4" fill="#EA9940" stroke="#ffffff" stroke-width="1.5"/>
         <rect x="11.5" y="7" width="9" height="8" rx="2" fill="#ffffff" opacity="0.92"/>
         <rect x="11.5" y="18.5" width="9" height="5.5" rx="1.5" fill="#ffffff" opacity="0.45"/>
-        <rect x="10.5" y="4" width="4" height="2.5" rx="1" fill="#fef3c7"/>
-        <rect x="17.5" y="4" width="4" height="2.5" rx="1" fill="#fef3c7"/>
-        <rect x="12" y="25.5" width="8" height="2" rx="0.75" fill="#ea580c"/>
+        <rect x="10.5" y="4" width="4" height="2.5" rx="1" fill="#F0AD63"/>
+        <rect x="17.5" y="4" width="4" height="2.5" rx="1" fill="#F0AD63"/>
+        <rect x="12" y="25.5" width="8" height="2" rx="0.75" fill="#C97D2E"/>
       </svg>
     </div>`,
     iconSize: [40, 40],
@@ -102,7 +102,7 @@ export function RouteMapLeaflet({
       <Polyline
         positions={route}
         pathOptions={{
-          color: "#10B981",
+          color: "#6CA3A2",
           weight: 8,
           opacity: 0.12,
           lineCap: "round",
@@ -113,7 +113,7 @@ export function RouteMapLeaflet({
       <Polyline
         positions={route}
         pathOptions={{
-          color: "#0F6CBD",
+          color: "#307082",
           weight: 5,
           opacity: 0.3,
           lineCap: "round",
@@ -125,7 +125,7 @@ export function RouteMapLeaflet({
         <Polyline
           positions={progressRoute}
           pathOptions={{
-            color: "#F97316",
+            color: "#EA9940",
             weight: 4,
             opacity: 0.92,
             lineCap: "round",

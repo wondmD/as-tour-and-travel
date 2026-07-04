@@ -1,18 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { AppProviders } from "@/components/providers/AppProviders";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import "./fonts.css";
 import "./globals.css";
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "AS Tour & Travel | Discover Ethiopia",
@@ -29,13 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${poppins.variable} ${inter.variable} h-full scroll-smooth antialiased`}
-    >
+    <html lang="en" className="h-full scroll-smooth antialiased">
       <body className="min-h-full flex flex-col bg-background font-sans text-text-primary">
-        <ScrollProgress />
-        {children}
+        <AppProviders>
+          <ScrollProgress />
+          {children}
+        </AppProviders>
       </body>
     </html>
   );

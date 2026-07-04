@@ -3,6 +3,103 @@
 export const unsplash = (id: string, w = 800) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&q=80`;
 
+/** Local tour photos — public/images/day1 … day9 */
+export const tourImages = {
+  cover: "/images/day1/day1-cover.webp",
+  day1: {
+    cover: "/images/day1/day1-cover.webp",
+    gallery: [
+      "/images/day1/national-museum.jpg",
+      "/images/day1/unitypark-photo.jpg",
+      "/images/day1/lucy.jpg",
+      "/images/day1/addis-abeba-city.jpg",
+    ],
+  },
+  day2: {
+    cover: "/images/day2/day2-cover.jpg",
+    gallery: [
+      "/images/day2/Ethnological-Museum.jpg",
+      "/images/day2/musuem.jpg",
+      "/images/day2/entoto-park.jpg",
+      "/images/day2/luxury-tented-camp-kiriftu.jpg",
+    ],
+  },
+  day3: {
+    cover: "/images/day3/day3-cover.jpg",
+    gallery: [
+      "/images/day3/ziplining.jpg",
+      "/images/day3/rope-adventure.jpg",
+      "/images/day3/horse-rifing.jpg",
+      "/images/day3/mountain-biking.jpg",
+    ],
+  },
+  day4: {
+    cover: "/images/day4/day4-cover.jpg",
+    gallery: [
+      "/images/day4/lake.jpg",
+      "/images/day4/bird-watching.jpg",
+      "/images/day4/water-park.jpg",
+      "/images/day4/noora-resort.jpg",
+    ],
+  },
+  day5: {
+    cover: "/images/day5/day5-cover.jpg",
+    gallery: [
+      "/images/day5/art-galery.jpg",
+      "/images/day5/hand-made1.jpg",
+      "/images/day5/hand-made2.jpg",
+      "/images/day5/day5-cover.jpg",
+    ],
+  },
+  day6: {
+    cover: "/images/day6/day6-cover.jpg",
+    gallery: [
+      "/images/day6/hicking.jpg",
+      "/images/day6/traditional-boat.jpg",
+      "/images/day6/eja-eco-lofge.jpg",
+      "/images/day6/day6-cover.jpg",
+    ],
+  },
+  day7: {
+    cover: "/images/day7/day7-cover.webp",
+    gallery: [
+      "/images/day7/landscape1.jpg",
+      "/images/day7/landscae2.jpg",
+      "/images/day7/landscape3.jpg",
+      "/images/day7/skylight-hotel.jpg",
+    ],
+  },
+  day8: {
+    cover: "/images/day8/day8-cover.jpg",
+    gallery: [
+      "/images/day8/dorze-vilage.jpg",
+      "/images/day8/Gughe-Highlands.jpg",
+      "/images/day8/lake-abaya.jpg",
+      "/images/day8/haile-resort.jpg",
+    ],
+  },
+  day9: {
+    cover: "/images/day9/hipo.jpg",
+    gallery: [
+      "/images/day9/corocodile.jpg",
+      "/images/day9/fish-eagle.jpg",
+      "/images/day9/white-pelicans.jpg",
+      "/images/day9/Forty-Springs.jpg",
+    ],
+  },
+  /** Day 10 — no folder; resort farewell + return to Addis */
+  day10: {
+    cover: "/images/day8/haile-resort.jpg",
+    thumb: "/images/day7/skylight-hotel.jpg",
+    gallery: [
+      "/images/day8/haile-resort.jpg",
+      "/images/day7/skylight-hotel.jpg",
+      "/images/day1/addis-abeba-city.jpg",
+      "/images/day9/goliath-herons.jpg",
+    ],
+  },
+} as const;
+
 export const ethiopiaImages = {
   tourCover: unsplash("1572888195250-3037a59d3578", 1920),
   landingHero: unsplash("1572888195250-3037a59d3578", 1920),
@@ -41,6 +138,14 @@ export const ethiopiaImages = {
     village: unsplash("1658823235938-c424fa0875d6"),
     camels: unsplash("1573404353091-bd68e3010d73"),
     portrait: unsplash("1546286541-10c006fdc19e"),
+  },
+
+  wonchi: {
+    hero: unsplash("1508914127305-fa5114b81b3f", 1920),
+    thumb: unsplash("1573403092240-26095e118918", 400),
+    crater: unsplash("1662186946255-6f3c09ec666e"),
+    highlands: unsplash("1572888195250-3037a59d3578"),
+    forest: unsplash("1564101151838-630e722d7b1f"),
   },
 
   harar: {

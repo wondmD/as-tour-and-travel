@@ -6,6 +6,7 @@ import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { tour001 } from "@/data/tour-001";
 import { ethiopiaImages } from "@/lib/images";
 import { Button } from "@/components/ui/Button";
+import { BookTourButton } from "@/components/booking/BookTourButton";
 import { DepartureCountdown } from "@/components/ui/DepartureCountdown";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { TrustRibbon } from "@/components/landing/TrustRibbon";
@@ -28,7 +29,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden"
+      className="relative flex min-h-[100dvh] items-center overflow-hidden"
     >
       <motion.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
         <Image
@@ -49,10 +50,10 @@ export function Hero() {
       <div className="pointer-events-none absolute -right-24 bottom-1/4 h-80 w-80 animate-blob-reverse rounded-full bg-primary/25 blur-[100px]" />
 
       <motion.div
-        className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-16 pt-32 md:px-6 lg:px-8 lg:pt-36"
+        className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-12 pt-24 sm:px-5 sm:pb-16 sm:pt-28 md:px-6 lg:px-8 lg:pt-36"
         style={{ y: contentY }}
       >
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
             <motion.span
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -68,14 +69,14 @@ export function Hero() {
               text="Discover the Beauty of Ethiopia"
               as="h1"
               delay={0.2}
-              className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl"
+              className="font-heading text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
             />
 
             <motion.p
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.75, ease }}
-              className="mt-6 max-w-xl text-lg leading-relaxed text-white/75"
+              className="mt-4 max-w-xl text-base leading-relaxed text-white/75 sm:mt-6 sm:text-lg"
             >
               Experience Ethiopia&apos;s breathtaking landscapes, ancient history,
               vibrant cultures, and unforgettable adventures through professionally
@@ -97,7 +98,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0, rotateX: 0 }}
             transition={{ duration: 0.8, delay: 0.45, ease }}
             whileHover={{ y: -8, transition: spring }}
-            className="gradient-border glass-strong animate-float overflow-hidden p-6 md:p-8"
+            className="gradient-border glass-strong animate-float overflow-hidden p-4 sm:p-6 md:p-8"
             style={{ perspective: 1000 }}
           >
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
@@ -121,7 +122,7 @@ export function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="font-heading text-xl font-bold text-text-primary md:text-2xl"
+                className="font-heading text-lg font-bold text-text-primary sm:text-xl md:text-2xl"
               >
                 {tour.title}
               </motion.h3>
@@ -129,21 +130,21 @@ export function Hero() {
               <DepartureCountdown
                 departureDate={tour.departureDate}
                 availableSeats={tour.availableSeats}
-                className="mt-4"
+                className="mt-4 hidden sm:block"
               />
 
               <motion.div
                 variants={staggerContainer}
                 initial="hidden"
                 animate="visible"
-                className="mt-6 grid grid-cols-2 gap-3"
+                className="mt-4 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-3"
               >
                 {cardStats(tour).map(({ icon: Icon, label }) => (
                   <motion.div
                     key={label}
                     variants={staggerItem}
                     whileHover={{ scale: 1.03, transition: spring }}
-                    className="flex items-center gap-2.5 rounded-xl bg-background/80 px-3 py-2.5 text-sm text-text-secondary ring-1 ring-border/50"
+                    className="flex items-center gap-2 rounded-xl bg-background/80 px-2.5 py-2 text-xs text-text-secondary ring-1 ring-border/50 sm:gap-2.5 sm:px-3 sm:py-2.5 sm:text-sm"
                   >
                     <Icon className="h-4 w-4 shrink-0 text-primary" />
                     {label}
@@ -155,31 +156,14 @@ export function Hero() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1, duration: 0.5, ease }}
-                className="mt-6 flex items-baseline gap-1 border-t border-border/60 pt-6"
-              >
-                <span className="text-sm text-text-secondary">From</span>
-                <span className="font-heading text-3xl font-bold gradient-text">
-                  ${tour.startingPrice.toLocaleString()}
-                </span>
-                <span className="text-sm text-text-secondary">/ person</span>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.25, duration: 0.5, ease }}
                 className="mt-6 flex flex-col gap-3 sm:flex-row"
               >
                 <Button href={`/tours/${tour.slug}`} variant="primary" className="flex-1">
                   Explore Tour
                 </Button>
-                <Button
-                  href={`/tours/${tour.slug}#booking`}
-                  variant="accent"
-                  className="flex-1"
-                >
-                  Reserve Your Seat
-                </Button>
+                <BookTourButton variant="accent" className="flex-1">
+                  Book Tour
+                </BookTourButton>
               </motion.div>
             </div>
           </motion.div>

@@ -24,7 +24,7 @@ function LogoMark({
       {...props}
     >
       {/* Outer badge */}
-      <rect x="1" y="1" width="46" height="46" rx="5" fill="#0F6CBD" />
+      <rect x="1" y="1" width="46" height="46" rx="5" fill="#307082" />
       <rect
         x="1"
         y="1"
@@ -62,7 +62,7 @@ function LogoMark({
       />
 
       {/* Accent rule */}
-      <rect x="10" y="35.5" width="28" height="1.25" rx="0.5" fill="#10B981" opacity="0.85" />
+      <rect x="10" y="35.5" width="28" height="1.25" rx="0.5" fill="#EA9940" opacity="0.85" />
     </svg>
   );
 }
@@ -105,12 +105,12 @@ export function Logo({
           />
           <div className="flex min-w-0 flex-col justify-center leading-none">
             <span
-              className={`font-heading text-[0.95rem] font-semibold tracking-[0.02em] sm:text-base ${colors.primary}`}
+              className={`font-heading text-sm font-semibold tracking-[0.02em] sm:text-[0.95rem] md:text-base ${colors.primary}`}
             >
               AS Tour &amp; Travel
             </span>
             <span
-              className={`mt-1 text-[0.62rem] font-medium uppercase tracking-[0.22em] ${colors.secondary}`}
+              className={`mt-0.5 text-[0.58rem] font-medium uppercase tracking-[0.18em] sm:mt-1 sm:text-[0.62rem] sm:tracking-[0.22em] ${colors.secondary}`}
             >
               Ethiopia
             </span>

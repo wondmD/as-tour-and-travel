@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
-import { NAV_LINKS, TOUR_001_SLUG } from "@/lib/constants";
+import { NAV_LINKS, ORGANIZER_CONTACT, TOUR_001_SLUG } from "@/lib/constants";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Logo } from "@/components/brand/Logo";
 import { ease } from "@/lib/motion";
@@ -21,7 +21,7 @@ export function Footer() {
       <div className="hero-grid-overlay absolute inset-0 opacity-30" />
       <div className="pointer-events-none absolute -left-20 top-0 h-64 w-64 animate-blob rounded-full bg-primary/20 blur-[100px]" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-16 md:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-5 sm:py-16 md:px-6 lg:px-8">
         <FadeIn direction="up">
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
             <div className="lg:col-span-1">
@@ -79,15 +79,15 @@ export function Footer() {
               <ul className="space-y-3">
                 <li className="flex items-start gap-3 text-sm text-white/65">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-secondary-light" />
-                  Bole Road, Addis Ababa, Ethiopia
+                  {ORGANIZER_CONTACT.address}
                 </li>
                 <li className="flex items-center gap-3 text-sm text-white/65">
                   <Phone className="h-4 w-4 shrink-0 text-secondary-light" />
-                  +251 11 123 4567
+                  {ORGANIZER_CONTACT.phone}
                 </li>
                 <li className="flex items-center gap-3 text-sm text-white/65">
                   <Mail className="h-4 w-4 shrink-0 text-secondary-light" />
-                  hello@astourtravel.com
+                  {ORGANIZER_CONTACT.email}
                 </li>
               </ul>
             </motion.div>

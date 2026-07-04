@@ -15,7 +15,7 @@ const testimonials = [
     country: "United Kingdom",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
     rating: 5,
-    text: "Our Tour 001 experience exceeded every expectation. From the coffee ceremony in Addis to feeding hyenas in Harar, every moment felt thoughtfully curated. Our guide Solomon was extraordinary.",
+    text: "Our Tour 001 experience exceeded every expectation. From the coffee ceremony in Addis to the Lake Chamo boat safari, every moment felt thoughtfully curated. Our guide Solomon was extraordinary.",
   },
   {
     name: "James Chen",

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { NAV_LINKS, TOUR_001_SLUG } from "@/lib/constants";
-import { Button } from "@/components/ui/Button";
+import { NAV_LINKS } from "@/lib/constants";
+import { BookTourButton } from "@/components/booking/BookTourButton";
 import { Logo } from "@/components/brand/Logo";
 import { ease, spring } from "@/lib/motion";
 
@@ -31,11 +31,11 @@ export function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease, delay: 0.1 }}
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6"
+      className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4 md:px-6"
     >
       <motion.nav
         layout
-        className={`mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-4 py-3 transition-colors duration-500 md:px-6 ${
+        className={`mx-auto flex max-w-7xl items-center justify-between gap-2 rounded-2xl px-3 py-2.5 transition-colors duration-500 sm:px-4 sm:py-3 md:px-6 ${
           scrolled
             ? "glass-strong shadow-lg shadow-primary/5"
             : "bg-transparent"
@@ -77,34 +77,16 @@ export function Navbar() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4, duration: 0.5, ease }}
-          className="hidden items-center gap-2 lg:flex"
+          className="hidden items-center lg:flex"
         >
-          <Link
-            href="/login"
-            className={`rounded-xl px-4 py-2 text-sm font-medium transition-all hover:bg-primary/5 ${
-              scrolled ? "text-text-secondary hover:text-primary" : "text-white/85 hover:text-white"
-            }`}
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all ${
-              scrolled
-                ? "glass border-border/60 text-text-primary hover:border-primary/20"
-                : "border-white/25 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10"
-            }`}
-          >
-            Register
-          </Link>
-          <Button href={`/tours/${TOUR_001_SLUG}`} variant="accent" className="!py-2.5 !px-5">
+          <BookTourButton variant="accent" className="!py-2.5 !px-5">
             Book Tour
-          </Button>
+          </BookTourButton>
         </motion.div>
 
         <button
           type="button"
-          className={`rounded-xl p-2 transition-colors lg:hidden ${
+          className={`flex min-h-11 min-w-11 items-center justify-center rounded-xl p-2 transition-colors lg:hidden ${
             scrolled ? "text-text-primary hover:bg-primary/5" : "text-white hover:bg-white/10"
           }`}
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -150,28 +132,13 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
-              <hr className="my-2 border-border/60" />
-              <Link
-                href="/login"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-text-secondary"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-text-secondary"
-              >
-                Register
-              </Link>
-              <Button
-                href={`/tours/${TOUR_001_SLUG}`}
+              <BookTourButton
                 variant="accent"
                 className="mt-2 w-full"
+                onOpen={() => setMobileOpen(false)}
               >
                 Book Tour
-              </Button>
+              </BookTourButton>
             </motion.div>
           </motion.div>
         )}

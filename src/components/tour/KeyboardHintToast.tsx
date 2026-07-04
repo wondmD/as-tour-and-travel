@@ -8,6 +8,8 @@ export function KeyboardHintToast() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(max-width: 1023px)").matches) return;
     if (sessionStorage.getItem("as-tour-keyboard-hint") === "dismissed") return;
 
     const timer = setTimeout(() => setVisible(true), 1200);
@@ -29,7 +31,7 @@ export function KeyboardHintToast() {
           initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-          className="fixed bottom-24 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl border border-border/60 bg-surface/95 px-4 py-3 shadow-xl backdrop-blur-md lg:bottom-8"
+          className="fixed bottom-8 left-1/2 z-50 hidden -translate-x-1/2 items-center gap-3 rounded-2xl border border-border/60 bg-surface/95 px-4 py-3 shadow-xl backdrop-blur-md lg:flex"
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <Keyboard className="h-4 w-4" />

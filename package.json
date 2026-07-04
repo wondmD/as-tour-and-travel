@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/poppins": "^5.2.7",
     "framer-motion": "^12.42.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.23.0",

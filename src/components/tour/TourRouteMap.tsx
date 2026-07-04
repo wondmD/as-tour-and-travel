@@ -18,7 +18,7 @@ const RouteMapLeaflet = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full min-h-[380px] items-center justify-center rounded-[18px] bg-[#e8eef4] text-sm text-text-secondary">
+      <div className="flex h-full min-h-[380px] items-center justify-center rounded-[18px] bg-background-alt text-sm text-text-secondary">
         Loading map…
       </div>
     ),
@@ -27,11 +27,15 @@ const RouteMapLeaflet = dynamic(
 
 interface TourRouteMapProps {
   destinations: Destination[];
+  layout?: "default" | "sidebar";
 }
 
 const LOOP_DURATION_MS = 22000;
 
-export function TourRouteMap({ destinations }: TourRouteMapProps) {
+export function TourRouteMap({
+  destinations,
+  layout = "default",
+}: TourRouteMapProps) {
   const route = useMemo(() => destinationsToRoute(destinations), [destinations]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -82,6 +86,8 @@ export function TourRouteMap({ destinations }: TourRouteMapProps) {
     }
   }, [route]);
 
+  const isSidebar = layout === "sidebar";
+
   return (
     <motion.div
       ref={containerRef}
@@ -89,23 +95,29 @@ export function TourRouteMap({ destinations }: TourRouteMapProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease }}
-      className="mb-10 overflow-hidden rounded-[22px] border border-border/50 bg-surface/90 shadow-lg shadow-primary/5 backdrop-blur-md"
+      className={`overflow-hidden rounded-[18px] border border-border/50 bg-surface/90 shadow-lg shadow-primary/5 backdrop-blur-md sm:rounded-[22px] ${
+        isSidebar ? "h-full" : "mb-8 sm:mb-10"
+      }`}
     >
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-border/40 px-4 py-3 md:px-6">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-            Route Overview
-          </p>
-          <h3 className="font-heading text-lg font-bold text-text-primary md:text-xl">
-            Your path across Ethiopia
-          </h3>
-          <p className="mt-1 text-xs text-text-secondary">
-            Watch the tour route unfold — scroll to zoom, drag to pan
-          </p>
-        </div>
+      <div className="flex flex-col gap-1 border-b border-border/40 px-3 py-2.5 sm:px-4 sm:py-3 md:px-5">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+          Route Overview
+        </p>
+        <h3 className="font-heading text-sm font-bold text-text-primary sm:text-base md:text-lg">
+          Your path across Ethiopia
+        </h3>
+        {!isSidebar && (
+          <p className="text-xs text-text-secondary">Pinch to zoom, drag to pan</p>
+        )}
       </div>
 
-      <div className="relative h-[380px] p-3 md:h-[440px] md:p-4">
+      <div
+        className={`relative p-2 sm:p-3 ${
+          isSidebar
+            ? "h-[240px] sm:h-[280px] md:h-[320px] lg:h-[min(520px,70vh)] lg:min-h-[420px]"
+            : "h-[260px] sm:h-[320px] md:h-[380px] md:p-4 lg:h-[440px]"
+        }`}
+      >
         <RouteMapLeaflet
           destinations={destinations}
           flowProgress={flowProgress}

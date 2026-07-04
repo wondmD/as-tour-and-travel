@@ -7,7 +7,6 @@ import { FeaturedDestinations } from "@/components/landing/FeaturedDestinations"
 import { Testimonials } from "@/components/landing/Testimonials";
 import { TravelGallery } from "@/components/landing/TravelGallery";
 import { AboutEthiopia } from "@/components/landing/AboutEthiopia";
-import { MeetYourGuide } from "@/components/landing/MeetYourGuide";
 import { Newsletter } from "@/components/landing/Newsletter";
 
 export default function HomePage() {
@@ -20,7 +19,6 @@ export default function HomePage() {
         <ToursSection />
         <FeaturedDestinations />
         <Testimonials />
-        <MeetYourGuide />
         <TravelGallery />
         <AboutEthiopia />
         <Newsletter />

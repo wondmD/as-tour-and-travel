@@ -34,7 +34,7 @@ export default async function TourPage({ params }: TourPageProps) {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="tour-page-main">
         <TourHero tour={tour001} />
         <TourRouteExplorer destinations={tour001.destinations} />
         <BookingCTA tour={tour001} />
