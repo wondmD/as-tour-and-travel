@@ -19,7 +19,7 @@ export function TextReveal({
   const words = text.split(" ");
 
   return (
-    <Tag className={className}>
+    <Tag className={`break-words ${className}`}>
       {words.map((word, i) => (
         <span key={`${word}-${i}`} className="inline-block overflow-hidden">
           <motion.span

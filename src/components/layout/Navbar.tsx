@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { BookTourButton } from "@/components/booking/BookTourButton";
+import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
 import { Logo } from "@/components/brand/Logo";
 import { ease, spring } from "@/lib/motion";
 
@@ -77,8 +78,9 @@ export function Navbar() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4, duration: 0.5, ease }}
-          className="hidden items-center lg:flex"
+          className="hidden items-center gap-2 lg:flex"
         >
+          <LanguageSwitcher theme={scrolled ? "dark" : "light"} />
           <BookTourButton variant="accent" className="!py-2.5 !px-5">
             Book Tour
           </BookTourButton>
@@ -132,6 +134,11 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+              <LanguageSwitcher
+                theme="dark"
+                className="mt-2 flex w-full justify-center"
+                onSelect={() => setMobileOpen(false)}
+              />
               <BookTourButton
                 variant="accent"
                 className="mt-2 w-full"

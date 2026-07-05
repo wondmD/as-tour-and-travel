@@ -9,7 +9,8 @@ import {
   type ReactNode,
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Clock, Mail, MapPin, Phone, X } from "lucide-react";
+import { Clock, Mail, Phone, X } from "lucide-react";
+import { OrganizerPartners } from "@/components/brand/OrganizerPartners";
 import { ORGANIZER_CONTACT } from "@/lib/constants";
 import { ease } from "@/lib/motion";
 
@@ -107,22 +108,20 @@ export function BookTourProvider({ children }: { children: ReactNode }) {
               </div>
 
               <div className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
+                <OrganizerPartners variant="compact" theme="dark" showDescription />
+
                 <div>
                   <p className="font-heading text-sm font-semibold text-text-primary">
                     {ORGANIZER_CONTACT.name}
                   </p>
                   <ul className="mt-3 space-y-2.5 text-sm text-text-secondary">
-                    <li className="flex items-start gap-2.5">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      {ORGANIZER_CONTACT.address}
-                    </li>
                     <li className="flex items-center gap-2.5">
                       <Phone className="h-4 w-4 shrink-0 text-primary" />
-                      {ORGANIZER_CONTACT.phone}
+                      <span className="notranslate">{ORGANIZER_CONTACT.phone}</span>
                     </li>
                     <li className="flex items-center gap-2.5">
                       <Mail className="h-4 w-4 shrink-0 text-primary" />
-                      {ORGANIZER_CONTACT.email}
+                      <span className="notranslate">{ORGANIZER_CONTACT.email}</span>
                     </li>
                     <li className="flex items-center gap-2.5">
                       <Clock className="h-4 w-4 shrink-0 text-primary" />

@@ -646,3 +646,39 @@ h6 {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Google Translate ── */
+
+body {
+  top: 0 !important;
+}
+
+.goog-te-banner-frame.skiptranslate,
+iframe.skiptranslate,
+.goog-te-spinner-pos,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+
+.goog-te-gadget,
+.goog-logo-link,
+.goog-te-gadget span,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+#google_translate_element,
+.skiptranslate.goog-te-gadget {
+  font-size: 0 !important;
+}
+
+html.translated-ltr,
+html.translated-rtl {
+  margin-top: 0 !important;
+}
+
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+}

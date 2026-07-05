@@ -59,6 +59,7 @@ export interface Tour {
   currency: string;
   groupSize: string;
   coverImage: string;
+  jointlyOrganized?: boolean;
   summary: string;
   includedServices: string[];
   excludedServices: string[];
@@ -74,13 +75,14 @@ export const tour001: Tour = {
   status: "Upcoming",
   duration: "10 Days / 9 Nights",
   destinationCount: 10,
-  departureDate: "March 15, 2026",
+  departureDate: "July 23, 2026",
   availableSeats: 12,
-  totalSeats: 20,
+  totalSeats: 30,
   startingPrice: 2890,
   currency: "USD",
-  groupSize: "8–20 travelers",
+  groupSize: "8–30 travelers",
   coverImage: t.cover,
+  jointlyOrganized: true,
   summary:
     "Discover Ethiopia at an unhurried pace — from Addis Ababa's museums and coffee culture to Entoto's mountain air, Bishoftu's crater lakes, the spectacular Wonchi highlands, and Arba Minch's Dorze villages, Lake Chamo wildlife, and Forty Springs. Comfortable hotels, expert guides, and flexible leisure time throughout.",
   includedServices: [

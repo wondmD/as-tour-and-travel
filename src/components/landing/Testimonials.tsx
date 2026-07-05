@@ -7,27 +7,28 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stagger } from "@/components/ui/Stagger";
 import { StaggerItem } from "@/components/ui/StaggerItem";
+import { ethiopiaImages } from "@/lib/images";
 import { cardHover, spring } from "@/lib/motion";
 
 const testimonials = [
   {
     name: "Sarah Mitchell",
     country: "United Kingdom",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
+    avatar: ethiopiaImages.testimonials.avatar1,
     rating: 5,
     text: "Our Tour 001 experience exceeded every expectation. From the coffee ceremony in Addis to the Lake Chamo boat safari, every moment felt thoughtfully curated. Our guide Solomon was extraordinary.",
   },
   {
     name: "James Chen",
     country: "Australia",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+    avatar: ethiopiaImages.testimonials.avatar2,
     rating: 5,
     text: "As a photographer, I was blown away by the diversity of landscapes in just five days. AS Tour understood exactly what I needed — early morning shoots, local access, and zero rushed moments.",
   },
   {
     name: "Elena Rodriguez",
     country: "Spain",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
+    avatar: ethiopiaImages.testimonials.avatar3,
     rating: 5,
     text: "Traveling solo as a woman, safety was my top concern. AS Tour made me feel completely secure while delivering the most authentic cultural experiences I've had in 30 countries of travel.",
   },

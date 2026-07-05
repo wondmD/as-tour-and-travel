@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Calendar, Check, Users } from "lucide-react";
 import type { Tour } from "@/data/tour-001";
+import { OrganizerPartners } from "@/components/brand/OrganizerPartners";
 import { BookTourButton } from "@/components/booking/BookTourButton";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SectionPhotoBackground } from "@/components/ui/SectionPhotoBackground";
@@ -42,6 +43,12 @@ export function BookingCTA({ tour }: BookingCTAProps) {
                 <div className="hero-grid-overlay absolute inset-0 opacity-40" />
 
                 <div className="relative">
+                  {tour.jointlyOrganized && (
+                    <div className="mb-6 rounded-2xl bg-white/10 p-4 ring-1 ring-white/15 backdrop-blur-sm">
+                      <OrganizerPartners variant="card" theme="light" />
+                    </div>
+                  )}
+
                   <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}

@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone } from "lucide-react";
-import { NAV_LINKS, ORGANIZER_CONTACT, TOUR_001_SLUG } from "@/lib/constants";
+import { Mail, Phone } from "lucide-react";
+import { NAV_LINKS, JOINT_TOUR_ORGANIZERS, ORGANIZER_CONTACT, SISTER_COMPANY, TOUR_001_SLUG } from "@/lib/constants";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Logo } from "@/components/brand/Logo";
+import { OrganizerPartners } from "@/components/brand/OrganizerPartners";
 import { ease } from "@/lib/motion";
 
 const certifications = [
@@ -33,6 +34,18 @@ export function Footer() {
               <p className="mt-4 text-sm leading-relaxed text-white/55">
                 Curating unforgettable journeys through Ethiopia for international
                 travelers since 2010. Licensed, insured, and locally owned.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-white/50">
+                {JOINT_TOUR_ORGANIZERS.description}
+              </p>
+              <OrganizerPartners
+                variant="compact"
+                theme="light"
+                className="mt-4"
+                showDescription={false}
+              />
+              <p className="mt-2 text-xs text-white/45" dir="rtl" lang="ar">
+                {SISTER_COMPANY.nameAr} — {SISTER_COMPANY.officeAr}
               </p>
             </div>
 
@@ -77,17 +90,13 @@ export function Footer() {
                 Contact
               </h3>
               <ul className="space-y-3">
-                <li className="flex items-start gap-3 text-sm text-white/65">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-secondary-light" />
-                  {ORGANIZER_CONTACT.address}
-                </li>
                 <li className="flex items-center gap-3 text-sm text-white/65">
                   <Phone className="h-4 w-4 shrink-0 text-secondary-light" />
-                  {ORGANIZER_CONTACT.phone}
+                  <span className="notranslate">{ORGANIZER_CONTACT.phone}</span>
                 </li>
                 <li className="flex items-center gap-3 text-sm text-white/65">
                   <Mail className="h-4 w-4 shrink-0 text-secondary-light" />
-                  {ORGANIZER_CONTACT.email}
+                  <span className="notranslate">{ORGANIZER_CONTACT.email}</span>
                 </li>
               </ul>
             </motion.div>

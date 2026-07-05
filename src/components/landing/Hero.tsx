@@ -7,6 +7,7 @@ import { tour001 } from "@/data/tour-001";
 import { ethiopiaImages } from "@/lib/images";
 import { Button } from "@/components/ui/Button";
 import { BookTourButton } from "@/components/booking/BookTourButton";
+import { OrganizerPartners } from "@/components/brand/OrganizerPartners";
 import { DepartureCountdown } from "@/components/ui/DepartureCountdown";
 import { TextReveal } from "@/components/ui/TextReveal";
 import { TrustRibbon } from "@/components/landing/TrustRibbon";
@@ -126,6 +127,17 @@ export function Hero() {
               >
                 {tour.title}
               </motion.h3>
+
+              {tour.jointlyOrganized && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.75, duration: 0.5, ease }}
+                  className="mt-4 rounded-xl bg-background/70 p-3 ring-1 ring-border/50 backdrop-blur-sm sm:mt-5 sm:p-4"
+                >
+                  <OrganizerPartners variant="card" theme="dark" showDescription={false} />
+                </motion.div>
+              )}
 
               <DepartureCountdown
                 departureDate={tour.departureDate}
