@@ -76,6 +76,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full scroll-smooth antialiased" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://translate.google.com" />
+        <link rel="preconnect" href="https://translate.googleapis.com" />
+      </head>
       <body className="min-h-full flex flex-col bg-background font-sans text-text-primary">
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <AppProviders>

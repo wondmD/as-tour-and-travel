@@ -106,7 +106,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -12, scale: 0.98 }}
             transition={{ duration: 0.25, ease }}
-            className="mx-auto mt-2 max-w-7xl overflow-hidden rounded-2xl glass-strong shadow-xl lg:hidden"
+            className="mx-auto mt-2 max-w-7xl overflow-visible rounded-2xl glass-strong shadow-xl lg:hidden"
           >
             <motion.div
               initial="hidden"
@@ -136,7 +136,8 @@ export function Navbar() {
               ))}
               <LanguageSwitcher
                 theme="dark"
-                className="mt-2 flex w-full justify-center"
+                menuMode="inline"
+                className="mt-2"
                 onSelect={() => setMobileOpen(false)}
               />
               <BookTourButton

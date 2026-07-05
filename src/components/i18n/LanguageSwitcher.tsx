@@ -1,58 +1,36 @@
 "use client";
 
-import { Check, ChevronDown, Globe } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Check, ChevronDown, Globe, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  clearGoogleTranslateCookie,
-  getCookieLanguage,
-  getLanguageOption,
-  GOOGLE_TRANSLATE_CONTAINER_ID,
-  GOOGLE_TRANSLATE_SCRIPT_ID,
-  LANGUAGE_OPTIONS,
-  LANGUAGE_STORAGE_KEY,
-  setGoogleTranslateCookie,
-  waitForTranslateSelect,
-  type LanguageCode,
-} from "@/lib/i18n";
-
-declare global {
-  interface Window {
-    google?: {
-      translate?: {
-        TranslateElement?: new (
-          options: Record<string, unknown>,
-          containerId: string
-        ) => unknown;
-      };
-    };
-    googleTranslateElementInit?: () => void;
-  }
-}
+import { LANGUAGE_OPTIONS, type LanguageCode } from "@/lib/i18n";
+import { useTranslation } from "@/components/i18n/TranslationProvider";
 
 interface LanguageSwitcherProps {
   theme?: "light" | "dark";
   className?: string;
   onSelect?: () => void;
+  /** Inline list for constrained parents (e.g. mobile nav). Avoids clipped dropdowns. */
+  menuMode?: "dropdown" | "inline";
 }
 
 export function LanguageSwitcher({
   theme = "dark",
   className = "",
   onSelect,
+  menuMode = "dropdown",
 }: LanguageSwitcherProps) {
-  const pathname = usePathname();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-  const [language, setLanguage] = useState<LanguageCode>("en");
+  const { language, isReady, isTranslating, changeLanguage } = useTranslation();
 
   const selectedLanguage = useMemo(
-    () => getLanguageOption(language),
+    () => LANGUAGE_OPTIONS.find((option) => option.code === language) ?? LANGUAGE_OPTIONS[0],
     [language]
   );
 
   const isLight = theme === "light";
+  const isInline = menuMode === "inline";
+  const isDisabled = !isReady || isTranslating;
 
   useEffect(() => {
     const closeMenu = (event: MouseEvent) => {
@@ -74,134 +52,51 @@ export function LanguageSwitcher({
     };
   }, []);
 
-  useEffect(() => {
-    const storedLanguage =
-      (window.localStorage.getItem(LANGUAGE_STORAGE_KEY) as LanguageCode | null) ??
-      null;
-    const initialLanguage = storedLanguage ?? getCookieLanguage() ?? "en";
-    setLanguage(initialLanguage);
-
-    window.googleTranslateElementInit = () => {
-      const container = document.getElementById(GOOGLE_TRANSLATE_CONTAINER_ID);
-      if (
-        !container ||
-        !window.google?.translate?.TranslateElement ||
-        container.childNodes.length > 0
-      ) {
-        setIsReady(true);
-        return;
-      }
-
-      new window.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          includedLanguages: "en,ar",
-          autoDisplay: false,
-          layout: 0,
-        },
-        GOOGLE_TRANSLATE_CONTAINER_ID
-      );
-
-      setIsReady(true);
-    };
-
-    if (window.google?.translate?.TranslateElement) {
-      window.googleTranslateElementInit();
-      return;
-    }
-
-    if (document.getElementById(GOOGLE_TRANSLATE_SCRIPT_ID)) return;
-
-    const script = document.createElement("script");
-    script.id = GOOGLE_TRANSLATE_SCRIPT_ID;
-    script.src =
-      "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  useEffect(() => {
-    if (!isReady) return;
-
-    const syncLanguage = async () => {
-      const activeLanguage =
-        (window.localStorage.getItem(LANGUAGE_STORAGE_KEY) as LanguageCode | null) ??
-        language;
-      const selectedOption = getLanguageOption(activeLanguage);
-      const select = await waitForTranslateSelect();
-
-      if (activeLanguage === "en") {
-        clearGoogleTranslateCookie();
-        setGoogleTranslateCookie("en");
-        if (select && select.value !== "en") {
-          select.value = "en";
-          select.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-        setLanguage("en");
-        return;
-      }
-
-      if (!select) return;
-
-      setGoogleTranslateCookie(selectedOption.googleCode);
-      if (select.value !== selectedOption.googleCode) {
-        select.value = selectedOption.googleCode;
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-
-      setLanguage(activeLanguage);
-    };
-
-    const timer = window.setTimeout(() => {
-      void syncLanguage();
-    }, 120);
-
-    return () => window.clearTimeout(timer);
-  }, [isReady, pathname, language]);
-
   const handleLanguageChange = async (nextLanguage: LanguageCode) => {
-    const selectedOption = getLanguageOption(nextLanguage);
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
-    setLanguage(nextLanguage);
+    if (nextLanguage === language || isDisabled) return;
+
     setIsOpen(false);
     onSelect?.();
-
-    if (nextLanguage === "en") {
-      clearGoogleTranslateCookie();
-      setGoogleTranslateCookie("en");
-      window.location.reload();
-      return;
-    }
-
-    const select = await waitForTranslateSelect();
-    if (!select) {
-      setGoogleTranslateCookie(selectedOption.googleCode);
-      window.location.reload();
-      return;
-    }
-
-    setGoogleTranslateCookie(selectedOption.googleCode);
-    select.value = selectedOption.googleCode;
-    select.dispatchEvent(new Event("change", { bubbles: true }));
+    await changeLanguage(nextLanguage);
   };
 
-  return (
-    <div ref={wrapperRef} className={`notranslate relative ${className}`}>
-      <div id={GOOGLE_TRANSLATE_CONTAINER_ID} className="hidden" aria-hidden />
+  const menuSurfaceClass = isLight
+    ? "border-white/15 bg-text-primary/95 text-white backdrop-blur-md"
+    : "border-border/60 bg-surface text-text-primary";
 
+  const menuItemClass = isLight
+    ? "hover:bg-white/10"
+    : "hover:bg-primary/8 hover:text-primary";
+
+  return (
+    <div
+      ref={wrapperRef}
+      className={`notranslate ${isInline ? "w-full" : "relative"} ${className}`}
+    >
       <button
         type="button"
         aria-haspopup="menu"
         aria-expanded={isOpen}
         aria-label="Change language"
+        disabled={isDisabled}
         className={`inline-flex h-10 min-h-10 items-center gap-1.5 rounded-xl px-3 text-xs font-semibold transition-colors sm:gap-2 sm:px-3.5 sm:text-sm ${
+          isInline ? "w-full justify-between" : ""
+        } ${
+          isDisabled ? "cursor-wait opacity-80" : ""
+        } ${
           isLight
             ? "border border-white/20 bg-white/10 text-white backdrop-blur-sm hover:bg-white/15"
             : "border border-border/60 bg-surface text-text-primary shadow-sm hover:border-primary/20 hover:bg-primary/5"
         }`}
-        onClick={() => setIsOpen((current) => !current)}
+        onClick={() => {
+          if (!isDisabled) setIsOpen((current) => !current);
+        }}
       >
-        <Globe className="h-4 w-4 shrink-0" aria-hidden />
+        {isTranslating ? (
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden />
+        ) : (
+          <Globe className="h-4 w-4 shrink-0" aria-hidden />
+        )}
         <span>{selectedLanguage.shortLabel}</span>
         <ChevronDown
           className={`h-4 w-4 shrink-0 transition ${isOpen ? "rotate-180" : ""}`}
@@ -209,25 +104,21 @@ export function LanguageSwitcher({
         />
       </button>
 
-      {isOpen && (
+      {isOpen && !isDisabled && (
         <div
           role="menu"
-          className={`absolute end-0 top-full z-50 mt-2 min-w-40 rounded-2xl border p-1.5 shadow-xl sm:min-w-44 ${
-            isLight
-              ? "border-white/15 bg-text-primary/95 text-white backdrop-blur-md"
-              : "border-border/60 bg-surface text-text-primary"
-          }`}
+          className={
+            isInline
+              ? `mt-2 w-full rounded-2xl border p-1.5 shadow-lg ${menuSurfaceClass}`
+              : `absolute end-0 top-full z-[70] mt-2 min-w-40 rounded-2xl border p-1.5 shadow-xl sm:min-w-44 ${menuSurfaceClass}`
+          }
         >
           {LANGUAGE_OPTIONS.map((option) => (
             <button
               key={option.code}
               type="button"
               role="menuitem"
-              className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${
-                isLight
-                  ? "hover:bg-white/10"
-                  : "hover:bg-primary/8 hover:text-primary"
-              }`}
+              className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${menuItemClass}`}
               onClick={() => void handleLanguageChange(option.code)}
             >
               <span>{option.label}</span>
