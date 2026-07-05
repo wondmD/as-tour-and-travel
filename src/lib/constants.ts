@@ -15,7 +15,7 @@ export const AS_TOUR = {
 } as const;
 
 export const SISTER_COMPANY = {
-  nameEn: "AL-Sekina Company",
+  nameEn: "Sekina Company",
   nameAr: "شركة السكينة",
   officeEn: "Import Export · Business Office",
   officeAr: "مكتب للإستيراد و التصدير",
@@ -26,7 +26,7 @@ export const SISTER_COMPANY = {
 export const JOINT_TOUR_ORGANIZERS = {
   label: "Jointly organized by",
   description:
-    "This tour is jointly organized by AS Tour & Travel and AL-Sekina Company, our sister import–export business office.",
+    "This tour is jointly organized by AS Tour & Travel and Sekina Company, our sister import–export business office.",
   descriptionAr:
     "تنظم هذه الرحلة بالتعاون بين AS Tour & Travel وشركة السكينة للإستيراد والتصدير، شركتنا الشقيقة.",
 } as const;

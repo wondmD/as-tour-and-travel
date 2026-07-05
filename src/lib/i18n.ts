@@ -205,9 +205,8 @@ export async function applyLanguageTranslation(
     setGoogleTranslateCookie("en");
 
     if (select) {
-      select.value = "en";
-      select.dispatchEvent(new Event("change", { bubbles: true }));
-      await waitForTranslationComplete("en", 2500);
+      triggerTranslateSelect(select, "en");
+      await waitForTranslationComplete("en", 2000);
       if (isTranslationApplied("en")) {
         return { needsReload: false };
       }
@@ -222,10 +221,17 @@ export async function applyLanguageTranslation(
   }
 
   setGoogleTranslateCookie(option.googleCode);
-  if (select.value !== option.googleCode) {
-    select.value = option.googleCode;
-    select.dispatchEvent(new Event("change", { bubbles: true }));
+  triggerTranslateSelect(select, option.googleCode);
+
+  await new Promise((resolve) => window.setTimeout(resolve, 300));
+  if (isTranslationApplied("ar")) {
+    return { needsReload: false };
   }
 
   return { needsReload: false };
+}
+
+function triggerTranslateSelect(select: HTMLSelectElement, googleCode: string) {
+  select.value = googleCode;
+  select.dispatchEvent(new Event("change", { bubbles: true }));
 }

@@ -67,6 +67,7 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
   const [overlayLanguage, setOverlayLanguage] = useState<LanguageCode>("en");
   const initialSyncDone = useRef(false);
   const hadPendingReload = useRef(false);
+  const changeInProgress = useRef(false);
 
   useEffect(() => {
     const pending = window.sessionStorage.getItem(TRANSLATION_PENDING_KEY);
@@ -100,7 +101,13 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
             window.location.reload();
             return;
           }
-          return waitForTranslationComplete("ar", 12000);
+          return waitForTranslationComplete("ar", 10000);
+        })
+        .then(() => {
+          if (stored === "ar" && !isTranslationApplied("ar")) {
+            window.sessionStorage.setItem(TRANSLATION_PENDING_KEY, "ar");
+            window.location.reload();
+          }
         })
         .finally(() => setIsTranslating(false));
       return;
@@ -113,10 +120,13 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
 
   const changeLanguage = useCallback(
     async (nextLanguage: LanguageCode) => {
-      if (nextLanguage === language && isTranslationApplied(nextLanguage)) {
-        return;
-      }
+      if (changeInProgress.current) return;
 
+      const alreadyApplied =
+        nextLanguage === language && isTranslationApplied(nextLanguage);
+      if (alreadyApplied) return;
+
+      changeInProgress.current = true;
       setOverlayLanguage(nextLanguage);
       setIsTranslating(true);
       setLanguage(nextLanguage);
@@ -130,8 +140,14 @@ export function TranslationProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        await waitForTranslationComplete(nextLanguage, 12000);
+        await waitForTranslationComplete(nextLanguage, 10000);
+
+        if (!isTranslationApplied(nextLanguage)) {
+          window.sessionStorage.setItem(TRANSLATION_PENDING_KEY, nextLanguage);
+          window.location.reload();
+        }
       } finally {
+        changeInProgress.current = false;
         setIsTranslating(false);
       }
     },

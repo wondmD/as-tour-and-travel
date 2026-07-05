@@ -13,24 +13,33 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { cardHover, spring } from "@/lib/motion";
 import { TOUR_001_SLUG } from "@/lib/constants";
 
+const FEATURED_DESTINATION_IDS = [
+  "addis-arrival",
+  "bishoftu-lakeside",
+  "wonchi-crater",
+  "arba-minch-chamo",
+] as const;
+
 function truncateText(text: string, maxLength = 120) {
   if (text.length <= maxLength) return text;
   return `${text.slice(0, maxLength).trimEnd()}…`;
 }
 
 export function FeaturedDestinations() {
-  const destinations = tour001.destinations;
+  const destinations = tour001.destinations.filter((dest) =>
+    FEATURED_DESTINATION_IDS.includes(dest.id as (typeof FEATURED_DESTINATION_IDS)[number])
+  );
 
   return (
     <Section id="destinations" pattern="diagonal" tone="alt" mesh>
       <SectionHeading
-        eyebrow="Tour 001 Route"
-        title="Destinations on This Journey"
-        description={`All ${tour001.destinationCount} stops on our ${tour001.duration.toLowerCase()} leisure tour — from Addis Ababa and the highlands to Bishoftu, Wonchi, and Arba Minch in southern Ethiopia.`}
+        eyebrow="Tour 001 Highlights"
+        title="Featured Destinations"
+        description={`A taste of our ${tour001.duration.toLowerCase()} leisure tour — from Addis Ababa and crater lakes to Wonchi highlands and Arba Minch wildlife.`}
         gradient
       />
 
-      <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {destinations.map((dest) => (
           <StaggerItem key={dest.id}>
             <motion.article whileHover={cardHover} className="glass-card group h-full overflow-hidden">
@@ -45,7 +54,7 @@ export function FeaturedDestinations() {
                     alt={dest.name}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                 </motion.div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
