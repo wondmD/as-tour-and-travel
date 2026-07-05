@@ -9,13 +9,6 @@ import { Logo } from "@/components/brand/Logo";
 import { OrganizerPartners } from "@/components/brand/OrganizerPartners";
 import { ease } from "@/lib/motion";
 
-const certifications = [
-  "Ethiopian Tourism Commission Licensed",
-  "IATA Accredited Agent",
-  "ATA Member (African Travel Association)",
-  "Fully Insured Operations",
-];
-
 export function Footer() {
   return (
     <footer id="contact" className="relative overflow-hidden bg-text-primary text-white">
@@ -24,7 +17,7 @@ export function Footer() {
 
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-5 sm:py-16 md:px-6 lg:px-8">
         <FadeIn direction="up">
-          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
             <div className="lg:col-span-1">
               <Link href="/" className="group mb-4 inline-block">
                 <motion.div whileHover={{ scale: 1.03 }} transition={{ type: "spring", stiffness: 300 }}>
@@ -33,7 +26,7 @@ export function Footer() {
               </Link>
               <p className="mt-4 text-sm leading-relaxed text-white/55">
                 Curating unforgettable journeys through Ethiopia for international
-                travelers since 2010. Licensed, insured, and locally owned.
+                travelers since 2010. Locally owned and passionately guided.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-white/50">
                 {JOINT_TOUR_ORGANIZERS.description}
@@ -98,24 +91,6 @@ export function Footer() {
                   <Mail className="h-4 w-4 shrink-0 text-secondary-light" />
                   <span className="notranslate">{ORGANIZER_CONTACT.email}</span>
                 </li>
-              </ul>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.5, ease }}
-            >
-              <h3 className="mb-4 font-heading text-sm font-semibold uppercase tracking-wider text-white/35">
-                Certifications
-              </h3>
-              <ul className="space-y-2">
-                {certifications.map((item) => (
-                  <li key={item} className="text-sm text-white/65">
-                    {item}
-                  </li>
-                ))}
               </ul>
             </motion.div>
           </div>

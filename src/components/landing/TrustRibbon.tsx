@@ -5,7 +5,7 @@ import { Shield, Headphones, Users, Landmark } from "lucide-react";
 import { ease } from "@/lib/motion";
 
 const items = [
-  { icon: Shield, label: "Licensed local guides" },
+  { icon: Shield, label: "Expert local guides" },
   { icon: Headphones, label: "24/7 emergency support" },
   { icon: Users, label: "Small group tours" },
   { icon: Landmark, label: "UNESCO-focused routes" },

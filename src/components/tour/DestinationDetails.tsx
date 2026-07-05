@@ -26,6 +26,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import type { Destination } from "@/data/tour-001";
+import { ImageLightbox } from "@/components/ui/ImageLightbox";
 import { ease, spring } from "@/lib/motion";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -96,6 +97,7 @@ interface DestinationDetailsProps {
 export function DestinationDetails({ destination, dark = false }: DestinationDetailsProps) {
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   return (
     <div
@@ -437,25 +439,37 @@ export function DestinationDetails({ destination, dark = false }: DestinationDet
               <DetailSection title="Photo Gallery" icon={Camera}>
                 <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3">
                   {destination.gallery.map((src, i) => (
-                    <motion.div
-                      key={src}
+                    <motion.button
+                      key={`${src}-${i}`}
+                      type="button"
                       whileHover={{ scale: 1.03 }}
                       transition={spring}
-                      className={`relative overflow-hidden rounded-2xl ring-1 ring-border/40 ${
+                      onClick={() => setLightboxIndex(i)}
+                      className={`group relative cursor-zoom-in overflow-hidden rounded-2xl ring-1 ring-border/40 transition hover:ring-primary/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                         i === 0 ? "col-span-2 aspect-[2/1] md:col-span-2 md:aspect-[21/9]" : "aspect-square"
                       }`}
+                      aria-label={`View ${destination.name} photo ${i + 1}`}
                     >
                       <Image
                         src={src}
                         alt={`${destination.name} gallery ${i + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 50vw, 33vw"
                       />
-                    </motion.div>
+                      <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/15" />
+                    </motion.button>
                   ))}
                 </div>
               </DetailSection>
+
+              <ImageLightbox
+                images={destination.gallery}
+                activeIndex={lightboxIndex}
+                altPrefix={destination.name}
+                onClose={() => setLightboxIndex(null)}
+                onNavigate={setLightboxIndex}
+              />
 
               {destination.videos.length > 0 && (
                 <DetailSection title="Videos" icon={Play}>

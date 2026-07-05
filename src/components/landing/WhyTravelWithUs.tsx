@@ -13,7 +13,7 @@ const features = [
     icon: Shield,
     title: "Safety First",
     description:
-      "Licensed guides, insured vehicles, and 24/7 emergency support ensure your peace of mind throughout every journey.",
+      "Experienced guides, reliable vehicles, and 24/7 emergency support ensure your peace of mind throughout every journey.",
     color: "from-primary/10 to-primary/5 text-primary",
   },
   {
