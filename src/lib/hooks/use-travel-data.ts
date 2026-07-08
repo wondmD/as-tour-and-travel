@@ -19,6 +19,10 @@ import type {
   TransportRoute,
   TravelerProfile,
   TripPlan,
+  TourBudget,
+  TourExpense,
+  TourFinancialSummary,
+  TourIncomeLine,
   User,
   WishlistItem,
 } from "@/lib/types";
@@ -49,8 +53,16 @@ import {
   updateSupportTicket,
   updateTour,
   upsertProfile,
+  getTourBudget,
+  updateTourBudget,
+  getTourExpenses,
+  addTourExpense,
+  removeTourExpense,
+  getTourFinancialSummary,
+  getAllTourFinancialSummaries,
 } from "@/lib/mock/db";
 import { ALL_TRAVELERS } from "@/lib/mock/seed";
+import { getTourIncomeLines } from "@/lib/tour-finance";
 import { useCurrentUser } from "@/lib/stores/auth";
 
 export const queryKeys = {
@@ -81,6 +93,10 @@ export const queryKeys = {
   blogPosts: ["blogPosts"] as const,
   settings: ["settings"] as const,
   adminStats: ["adminStats"] as const,
+  tourFinance: (tourId: string) => ["tourFinance", tourId] as const,
+  tourFinances: ["tourFinances"] as const,
+  tourExpensesList: (tourId: string) => ["tourExpenses", tourId] as const,
+  tourBudget: (tourId: string) => ["tourBudget", tourId] as const,
 };
 
 // ── Bookings ──
@@ -178,6 +194,93 @@ export function useUpdateTourStatus() {
       status: TourProduct["status"];
     }) => mockFetch(updateTour(id, { status })!),
     onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.tours }),
+  });
+}
+
+export function useAllTourFinances() {
+  return useQuery({
+    queryKey: queryKeys.tourFinances,
+    queryFn: () => mockFetch(getAllTourFinancialSummaries()),
+  });
+}
+
+export function useTourFinance(tourId: string) {
+  return useQuery({
+    queryKey: queryKeys.tourFinance(tourId),
+    queryFn: () => mockFetch(getTourFinancialSummary(tourId)),
+    enabled: Boolean(tourId),
+  });
+}
+
+export function useTourIncome(tourId: string) {
+  return useQuery({
+    queryKey: [...queryKeys.tourFinance(tourId), "income"],
+    queryFn: () => mockFetch(getTourIncomeLines(tourId, mockDb.bookings)),
+    enabled: Boolean(tourId),
+  });
+}
+
+export function useTourExpenses(tourId: string) {
+  return useQuery({
+    queryKey: queryKeys.tourExpensesList(tourId),
+    queryFn: () => mockFetch(getTourExpenses(tourId)),
+    enabled: Boolean(tourId),
+  });
+}
+
+export function useTourBudget(tourId: string) {
+  return useQuery({
+    queryKey: queryKeys.tourBudget(tourId),
+    queryFn: async () => {
+      const budget = getTourBudget(tourId);
+      if (!budget) throw new Error("Budget not found");
+      return mockFetch(budget);
+    },
+    enabled: Boolean(tourId),
+  });
+}
+
+export function useUpdateTourBudget() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (budget: TourBudget) => mockFetch(updateTourBudget(budget)),
+    onSuccess: (b) => {
+      qc.invalidateQueries({ queryKey: queryKeys.tourBudget(b.tourId) });
+      qc.invalidateQueries({ queryKey: queryKeys.tourFinance(b.tourId) });
+      qc.invalidateQueries({ queryKey: queryKeys.tourFinances });
+    },
+  });
+}
+
+export function useAddTourExpense() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (
+      data: Omit<TourExpense, "id"> & { tourId: string },
+    ) => {
+      const expense = addTourExpense({ ...data, id: nextId("exp") });
+      return mockFetch(expense);
+    },
+    onSuccess: (e) => {
+      qc.invalidateQueries({ queryKey: queryKeys.tourExpensesList(e.tourId) });
+      qc.invalidateQueries({ queryKey: queryKeys.tourFinance(e.tourId) });
+      qc.invalidateQueries({ queryKey: queryKeys.tourFinances });
+    },
+  });
+}
+
+export function useRemoveTourExpense() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, tourId }: { id: string; tourId: string }) => {
+      removeTourExpense(id);
+      return mockFetch({ id, tourId });
+    },
+    onSuccess: (result) => {
+      qc.invalidateQueries({ queryKey: queryKeys.tourExpensesList(result.tourId) });
+      qc.invalidateQueries({ queryKey: queryKeys.tourFinance(result.tourId) });
+      qc.invalidateQueries({ queryKey: queryKeys.tourFinances });
+    },
   });
 }
 
@@ -674,4 +777,4 @@ export function useAdminStats() {
   });
 }
 
-export type { Booking, Payment, User, WishlistItem, TripPlan, Hotel, TransportRoute, AttractionTicket };
+export type { Booking, Payment, User, WishlistItem, TripPlan, Hotel, TransportRoute, AttractionTicket, TourFinancialSummary, TourIncomeLine, TourExpense, TourBudget };

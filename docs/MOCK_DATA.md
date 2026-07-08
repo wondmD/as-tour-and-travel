@@ -37,7 +37,13 @@ Overview, bookings (+ detail), profile, saved travelers, wishlist, trips, journa
 Login, register, verify email, forgot/reset password
 
 ### Admin (role-filtered nav)
-Overview, bookings, payments, tours, hotels, transport, attraction tickets, destinations, promotions, reviews, blog, reports, customers, support (+ ticket thread), partner inventory, users & roles, settings
+Overview, bookings, payments, **tour management (income/expense/budget P&L)**, hotels, transport, attraction tickets, destinations, promotions, reviews, blog, reports, customers, support (+ ticket thread), partner inventory, users & roles, settings
+
+### Tour financial tracking (`/admin/tours/[id]`)
+- **Income** — derived from bookings (realized + projected)
+- **Expenses** — line items by category (accommodation, transport, guides, etc.)
+- **Budget** — per-tour budget with category allocations
+- **P/L analysis** — profit or loss = realized income − total expenses; budget variance shown
 
 ## Wiring to real API
 

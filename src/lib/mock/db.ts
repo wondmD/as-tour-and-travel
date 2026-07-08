@@ -20,6 +20,8 @@ import type {
   TransportRoute,
   TravelerProfile,
   TripPlan,
+  TourBudget,
+  TourExpense,
   User,
   WishlistItem,
 } from "@/lib/types";
@@ -45,8 +47,11 @@ import {
   TOURS,
   TRANSPORT_ROUTES,
   TRIPS,
+  TOUR_BUDGETS,
+  TOUR_EXPENSES,
   WISHLIST,
 } from "./seed";
+import { computeTourFinancials } from "@/lib/tour-finance";
 
 /** In-memory mutable store — resets on full page reload. */
 function clone<T>(value: T): T {
@@ -76,6 +81,8 @@ export const mockDb = {
   reviews: clone(REVIEWS),
   blogPosts: clone(BLOG_POSTS),
   settings: clone(APP_SETTINGS),
+  tourBudgets: clone(TOUR_BUDGETS),
+  tourExpenses: clone(TOUR_EXPENSES),
 };
 
 export type MockDb = typeof mockDb;
@@ -103,6 +110,8 @@ export function resetMockDb() {
   mockDb.reviews = clone(REVIEWS);
   mockDb.blogPosts = clone(BLOG_POSTS);
   mockDb.settings = clone(APP_SETTINGS);
+  mockDb.tourBudgets = clone(TOUR_BUDGETS);
+  mockDb.tourExpenses = clone(TOUR_EXPENSES);
 }
 
 const delay = (ms = 280) => new Promise((r) => setTimeout(r, ms));
@@ -252,6 +261,44 @@ export function updateDestination(id: string, patch: Partial<Destination>) {
   if (idx < 0) return null;
   mockDb.destinations[idx] = { ...mockDb.destinations[idx]!, ...patch };
   return mockDb.destinations[idx]!;
+}
+
+export function getTourBudget(tourId: string): TourBudget | undefined {
+  return mockDb.tourBudgets.find((b) => b.tourId === tourId);
+}
+
+export function updateTourBudget(budget: TourBudget) {
+  const idx = mockDb.tourBudgets.findIndex((b) => b.tourId === budget.tourId);
+  if (idx >= 0) mockDb.tourBudgets[idx] = budget;
+  else mockDb.tourBudgets.push(budget);
+  return budget;
+}
+
+export function getTourExpenses(tourId: string): TourExpense[] {
+  return mockDb.tourExpenses.filter((e) => e.tourId === tourId);
+}
+
+export function addTourExpense(expense: TourExpense) {
+  mockDb.tourExpenses.unshift(expense);
+  return expense;
+}
+
+export function removeTourExpense(id: string) {
+  mockDb.tourExpenses = mockDb.tourExpenses.filter((e) => e.id !== id);
+}
+
+export function getTourFinancialSummary(tourId: string) {
+  const budget = getTourBudget(tourId);
+  return computeTourFinancials(
+    tourId,
+    mockDb.bookings,
+    mockDb.tourExpenses,
+    budget,
+  );
+}
+
+export function getAllTourFinancialSummaries() {
+  return mockDb.tours.map((t) => getTourFinancialSummary(t.id));
 }
 
 export type { User, Booking, Payment, TourProduct, SavedTraveler, WishlistItem };

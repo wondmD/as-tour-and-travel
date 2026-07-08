@@ -92,6 +92,73 @@ export interface TourProduct {
   category: string;
 }
 
+/** Operational budget for a tour over a defined period. */
+export interface TourBudget {
+  tourId: string;
+  totalBudgetUsd: number;
+  periodLabel: string;
+  notes?: string;
+  categories: TourBudgetCategory[];
+}
+
+export interface TourBudgetCategory {
+  name: string;
+  allocatedUsd: number;
+}
+
+export type TourExpenseCategory =
+  | "accommodation"
+  | "transport"
+  | "guides"
+  | "food"
+  | "permits"
+  | "marketing"
+  | "equipment"
+  | "insurance"
+  | "other";
+
+export interface TourExpense {
+  id: string;
+  tourId: string;
+  departureId?: string;
+  category: TourExpenseCategory;
+  description: string;
+  amountUsd: number;
+  date: string;
+  vendor?: string;
+  status: "planned" | "paid" | "pending";
+}
+
+/** Booking-derived revenue line for a tour. */
+export interface TourIncomeLine {
+  id: string;
+  bookingReference: string;
+  departureDate: string;
+  travelerCount: number;
+  amountUsd: number;
+  paymentStatus: PaymentStatus;
+  bookingStatus: BookingStatus;
+  createdAt: string;
+}
+
+export interface TourFinancialSummary {
+  tourId: string;
+  totalIncomeUsd: number;
+  realizedIncomeUsd: number;
+  projectedIncomeUsd: number;
+  totalExpensesUsd: number;
+  paidExpensesUsd: number;
+  pendingExpensesUsd: number;
+  budgetUsd: number;
+  profitLossUsd: number;
+  budgetRemainingUsd: number;
+  profitMarginPercent: number;
+  isProfit: boolean;
+  isOverBudget: boolean;
+  expensesByCategory: Record<TourExpenseCategory, number>;
+  incomeByMonth: { month: string; amount: number }[];
+}
+
 export interface BookingTraveler {
   fullName: string;
   dateOfBirth?: string;

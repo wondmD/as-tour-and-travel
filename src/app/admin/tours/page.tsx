@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type ColumnDef } from "@tanstack/react-table";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { PageHeader } from "@/components/dashboard";
 import {
   Badge,
@@ -9,17 +11,32 @@ import {
   Progress,
   toast,
 } from "@/components/ui";
-import { useTours, useUpdateTourStatus } from "@/lib/hooks/use-travel-data";
-import { mockDb } from "@/lib/mock/db";
-import type { TourProduct } from "@/lib/types";
+import {
+  useAllTourFinances,
+  useTours,
+  useUpdateTourStatus,
+} from "@/lib/hooks/use-travel-data";
+import { formatUsd } from "@/lib/tour-finance";
+import type { TourFinancialSummary, TourProduct } from "@/lib/types";
 import { useRequireRole } from "@/components/auth/AuthGuard";
+import { cn } from "@/lib/cn";
+
+type TourRow = TourProduct & { finance?: TourFinancialSummary };
 
 export default function AdminToursPage() {
+  const router = useRouter();
   const { data: tours, isLoading } = useTours();
+  const { data: finances } = useAllTourFinances();
   const updateStatus = useUpdateTourStatus();
   const canEdit = useRequireRole(["admin", "staff", "content_manager"]);
 
-  const columns: ColumnDef<TourProduct, unknown>[] = [
+  const financeMap = new Map(finances?.map((f) => [f.tourId, f]));
+  const rows: TourRow[] = (tours ?? []).map((t) => ({
+    ...t,
+    finance: financeMap.get(t.id),
+  }));
+
+  const columns: ColumnDef<TourRow, unknown>[] = [
     {
       accessorKey: "title",
       header: "Tour",
@@ -28,11 +45,78 @@ export default function AdminToursPage() {
       ),
     },
     { accessorKey: "destination", header: "Destination" },
-    { accessorKey: "durationDays", header: "Days" },
     {
       accessorKey: "basePriceUsd",
       header: "From",
-      cell: ({ row }) => `$${row.original.basePriceUsd}`,
+      cell: ({ row }) => formatUsd(row.original.basePriceUsd),
+    },
+    {
+      id: "income",
+      header: "Income",
+      cell: ({ row }) => {
+        const f = row.original.finance;
+        if (!f) return "—";
+        return (
+          <span className="font-semibold tabular-nums text-success">
+            {formatUsd(f.realizedIncomeUsd)}
+          </span>
+        );
+      },
+    },
+    {
+      id: "expenses",
+      header: "Expenses",
+      cell: ({ row }) => {
+        const f = row.original.finance;
+        if (!f) return "—";
+        return (
+          <span className="font-semibold tabular-nums text-text-primary">
+            {formatUsd(f.totalExpensesUsd)}
+          </span>
+        );
+      },
+    },
+    {
+      id: "profit",
+      header: "P / L",
+      cell: ({ row }) => {
+        const f = row.original.finance;
+        if (!f) return "—";
+        return (
+          <span
+            className={cn(
+              "inline-flex items-center gap-1 font-bold tabular-nums",
+              f.isProfit ? "text-success" : "text-danger",
+            )}
+          >
+            {f.isProfit ? (
+              <TrendingUp className="size-3.5" />
+            ) : (
+              <TrendingDown className="size-3.5" />
+            )}
+            {f.isProfit ? "+" : ""}
+            {formatUsd(f.profitLossUsd)}
+          </span>
+        );
+      },
+    },
+    {
+      id: "budget",
+      header: "Budget",
+      cell: ({ row }) => {
+        const f = row.original.finance;
+        if (!f || f.budgetUsd === 0) return "—";
+        const pct = Math.round((f.totalExpensesUsd / f.budgetUsd) * 100);
+        return (
+          <div className="min-w-24">
+            <Progress
+              value={f.totalExpensesUsd}
+              max={f.budgetUsd}
+              tone={f.isOverBudget ? "danger" : pct >= 85 ? "warning" : "primary"}
+            />
+          </div>
+        );
+      },
     },
     {
       accessorKey: "status",
@@ -42,20 +126,6 @@ export default function AdminToursPage() {
           {row.original.status}
         </Badge>
       ),
-    },
-    {
-      id: "capacity",
-      header: "Next departure fill",
-      cell: ({ row }) => {
-        const dep = mockDb.departures.find((d) => d.tourId === row.original.id);
-        if (!dep) return "—";
-        const pct = Math.round((dep.seatsSold / dep.capacity) * 100);
-        return (
-          <div className="min-w-28">
-            <Progress value={dep.seatsSold} max={dep.capacity} tone={pct >= 85 ? "warning" : "primary"} />
-          </div>
-        );
-      },
     },
     {
       id: "actions",
@@ -79,11 +149,15 @@ export default function AdminToursPage() {
     },
   ];
 
+  const totalProfit =
+    finances?.reduce((s, f) => s + f.profitLossUsd, 0) ?? 0;
+  const profitableCount = finances?.filter((f) => f.isProfit).length ?? 0;
+
   return (
     <>
       <PageHeader
-        title="Tours"
-        description="Manage packages, departures, pricing, and availability."
+        title="Tour management"
+        description="Track income, expenses, budgets, and profit/loss for every tour package."
         actions={
           canEdit && (
             <Button size="sm" onClick={() => toast.info("Tour builder — mock")}>
@@ -92,7 +166,28 @@ export default function AdminToursPage() {
           )
         }
       />
-      <DataTable columns={columns} data={tours ?? []} loading={isLoading} />
+
+      {finances && (
+        <div className="mb-4 flex flex-wrap gap-3 text-sm">
+          <span className="rounded-full bg-primary/8 px-3 py-1 font-medium text-primary">
+            Portfolio P/L:{" "}
+            <strong className={totalProfit >= 0 ? "text-success" : "text-danger"}>
+              {totalProfit >= 0 ? "+" : ""}
+              {formatUsd(totalProfit)}
+            </strong>
+          </span>
+          <span className="rounded-full bg-text-secondary/8 px-3 py-1 text-text-secondary">
+            {profitableCount} of {finances.length} tours profitable
+          </span>
+        </div>
+      )}
+
+      <DataTable
+        columns={columns}
+        data={rows}
+        loading={isLoading}
+        onRowClick={(row) => router.push(`/admin/tours/${row.id}`)}
+      />
     </>
   );
 }
