@@ -5,6 +5,7 @@ import { Wand2 } from "lucide-react";
 import { Button } from "@/components/ui";
 import { TourTypeBadge } from "@/components/tour/TourTypeBadge";
 import { TourMemoriesSection } from "@/components/tour/TourMemoriesSection";
+import { TourTravelAssistance } from "@/components/transport/TourTravelAssistance";
 import { TOUR_TYPE_DESCRIPTIONS } from "@/lib/tour-labels";
 import { tourTypeSupportsMemory, type TourType } from "@/lib/types";
 
@@ -37,6 +38,7 @@ export function TourPageExtras({
       {tourTypeSupportsMemory(tourType) && (
         <TourMemoriesSection tourId={tourId} tourSlug={tourSlug} />
       )}
+      <TourTravelAssistance tourId={tourId} tourSlug={tourSlug} />
     </>
   );
 }

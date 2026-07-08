@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Bus, Car, Plane } from "lucide-react";
 import { PageHeader } from "@/components/dashboard";
@@ -41,6 +42,16 @@ export default function AdminTransportPage() {
     { accessorKey: "destination", header: "Destination" },
     { accessorKey: "operator", header: "Operator" },
     {
+      id: "assistance",
+      header: "Assistance",
+      cell: ({ row }) =>
+        row.original.assistanceIncluded ? (
+          <Badge variant="success">Coordinated</Badge>
+        ) : (
+          "—"
+        ),
+    },
+    {
       accessorKey: "durationMinutes",
       header: "Duration",
       cell: ({ row }) => {
@@ -77,12 +88,19 @@ export default function AdminTransportPage() {
     <>
       <PageHeader
         title="Transport"
-        description="Flights, buses, and private transfers linked to tour packages."
+        description="Flights, coaches, and private transfers — AS Tour helps travelers move effortlessly."
         actions={
           canEdit && (
-            <Button size="sm" onClick={() => toast.info("Route builder — mock")}>
-              Add route
-            </Button>
+            <>
+              <Link href="/admin/transport/confirmations">
+                <Button variant="soft" size="sm">
+                  Confirmations
+                </Button>
+              </Link>
+              <Button size="sm" onClick={() => toast.info("Route builder — mock")}>
+                Add route
+              </Button>
+            </>
           )
         }
       />

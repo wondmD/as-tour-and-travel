@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MapPin, Plus } from "lucide-react";
 import { PageHeader } from "@/components/dashboard";
 import {
-  Badge,
   Button,
   Card,
   CardContent,
@@ -11,23 +12,27 @@ import {
   CardHeader,
   CardTitle,
   EmptyState,
-  Progress,
   Spinner,
 } from "@/components/ui";
-import { useTrips } from "@/lib/hooks/use-travel-data";
+import { TravelPlanStatusBadge } from "@/components/travel/TravelDesignerParts";
+import { routeSummary } from "@/lib/travel-plan";
+import { useMyTravelPlans } from "@/lib/hooks/use-travel-plan-data";
 
 export default function TripsPage() {
-  const { data, isLoading } = useTrips();
+  const router = useRouter();
+  const { data, isLoading } = useMyTravelPlans();
 
   return (
     <>
       <PageHeader
         title="My trips"
-        description="Plan routes, organize days, and save itineraries for offline access."
+        description="Travel plans and routes — international, domestic, and multi-country."
         actions={
-          <Button size="sm" onClick={() => {}}>
-            <Plus className="size-4" /> New trip plan
-          </Button>
+          <Link href="/travel/design">
+            <Button size="sm">
+              <Plus className="size-4" /> New travel plan
+            </Button>
+          </Link>
         }
       />
 
@@ -36,33 +41,39 @@ export default function TripsPage() {
       ) : !data?.length ? (
         <EmptyState
           icon={MapPin}
-          title="No trip plans yet"
-          description="Create a named trip and add destinations day by day."
-          action={<Button size="sm">Create trip plan</Button>}
+          title="No travel plans yet"
+          description="Design a route with simple city stops — to Ethiopia, from Ethiopia, or within the country."
+          action={
+            <Link href="/travel/design">
+              <Button size="sm">Design travel</Button>
+            </Link>
+          }
         />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {data.map((trip) => (
-            <Card key={trip.id}>
-              <CardHeader actions={<Badge variant="primary">{trip.status}</Badge>}>
+            <Card
+              key={trip.id}
+              className="cursor-pointer"
+              onClick={() => router.push(`/account/travel/${trip.reference}`)}
+            >
+              <CardHeader actions={<TravelPlanStatusBadge status={trip.status} />}>
                 <CardTitle>{trip.name}</CardTitle>
                 <CardDescription>
-                  {trip.startDate && trip.endDate
-                    ? `${trip.startDate} → ${trip.endDate}`
-                    : "Dates not set"}
+                  {trip.startDate}
+                  {trip.endDate ? ` → ${trip.endDate}` : ""}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-text-secondary">{trip.itemCount} stops planned</p>
-                <Progress
-                  className="mt-3"
-                  value={trip.status === "planning" ? 35 : 80}
-                  label="Itinerary progress"
-                  showValue
-                />
-                <Button className="mt-4" size="sm" variant="soft" fullWidth>
-                  Open planner
-                </Button>
+                <p className="text-sm text-text-secondary">
+                  {routeSummary(trip.stops)} · {trip.travelerCount} traveler
+                  {trip.travelerCount === 1 ? "" : "s"}
+                </p>
+                <Link href={`/account/travel/${trip.reference}`} className="mt-4 block">
+                  <Button size="sm" variant="soft" fullWidth>
+                    View plan
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}

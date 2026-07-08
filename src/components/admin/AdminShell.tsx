@@ -18,6 +18,7 @@ import {
   Map,
   Megaphone,
   Newspaper,
+  Plane,
   Settings,
   Star,
   Ticket,
@@ -53,6 +54,7 @@ const ALL_NAV: (NavItem & { section: AdminSection })[] = [
   { label: "Payments", href: "/admin/payments", icon: CreditCard, section: "payments" },
   { label: "Tours", href: "/admin/tours", icon: Compass, section: "tours" },
   { label: "Custom tours", href: "/admin/custom-tours", icon: Wand2, badge: 2, section: "custom_tours" },
+  { label: "Travel bookings", href: "/admin/travel", icon: Plane, badge: 1, section: "travel_bookings" },
   { label: "Hotels", href: "/admin/hotels", icon: BedDouble, section: "hotels" },
   { label: "Transport", href: "/admin/transport", icon: Bus, section: "transport" },
   { label: "Tickets", href: "/admin/tickets", icon: Ticket, section: "tickets" },
@@ -70,7 +72,7 @@ const ALL_NAV: (NavItem & { section: AdminSection })[] = [
 
 const NAV_GROUPS_META = [
   { label: undefined, sections: ["overview", "bookings", "payments"] as AdminSection[] },
-  { label: "Catalog", sections: ["tours", "custom_tours", "hotels", "transport", "tickets", "destinations", "partner_inventory"] as AdminSection[] },
+  { label: "Catalog", sections: ["tours", "custom_tours", "travel_bookings", "hotels", "transport", "tickets", "destinations", "partner_inventory"] as AdminSection[] },
   { label: "Growth", sections: ["promotions", "reviews", "blog", "reports"] as AdminSection[] },
   { label: "Operations", sections: ["customers", "support", "users", "settings"] as AdminSection[] },
 ];
@@ -81,6 +83,7 @@ const CRUMB_LABELS: Record<string, string> = {
   payments: "Payments",
   tours: "Tours",
   "custom-tours": "Custom tours",
+  travel: "Travel bookings",
   hotels: "Hotels",
   transport: "Transport",
   tickets: "Tickets",

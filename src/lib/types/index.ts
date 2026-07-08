@@ -335,6 +335,65 @@ export interface TripPlan {
   status: "planning" | "active" | "completed";
 }
 
+/** Lightweight city/country hub — not the rich tour destination CMS. */
+export interface TravelHub {
+  id: string;
+  countryCode: string;
+  countryName: string;
+  city: string;
+  region: "ethiopia" | "africa" | "europe" | "americas" | "asia" | "middle_east";
+  isEthiopia: boolean;
+  status: "active" | "inactive";
+}
+
+export type TravelPlanKind =
+  | "inbound_international"
+  | "outbound_international"
+  | "round_trip_international"
+  | "domestic"
+  | "multi_country";
+
+export type TravelPlanStatus =
+  | "draft"
+  | "submitted"
+  | "quoted"
+  | "confirmed"
+  | "cancelled";
+
+/** A single stop on a travel route — country + city + dates only. */
+export interface TravelPlanStop {
+  id: string;
+  hubId: string;
+  countryCode: string;
+  countryName: string;
+  city: string;
+  arrivalDate: string;
+  nights: number;
+  sortOrder: number;
+}
+
+/** Standalone travel booking plan — international or domestic, simpler than a tour package. */
+export interface TravelPlan {
+  id: string;
+  reference: string;
+  userId: string;
+  customerName: string;
+  name: string;
+  kind: TravelPlanKind;
+  travelerCount: number;
+  stops: TravelPlanStop[];
+  startDate: string;
+  endDate?: string;
+  notes?: string;
+  /** AS Tour coordinates flights, transfers, and cross-border logistics. */
+  assistanceRequested: boolean;
+  status: TravelPlanStatus;
+  quotedUsd?: number;
+  staffNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface JournalEntry {
   id: string;
   userId: string;
@@ -514,10 +573,97 @@ export interface TransportRoute {
   type: "flight" | "bus" | "private_car";
   origin: string;
   destination: string;
+  /** Links route to destination catalog for tour leg matching. */
+  originDestinationId?: string;
+  destinationDestinationId?: string;
   operator: string;
   durationMinutes: number;
   priceFromUsd: number;
   status: "active" | "seasonal" | "inactive";
+  /** Instant ticket vs staff-confirmed (typical for private transfers). */
+  fulfillmentType?: "instant" | "on_request";
+  /** AS Tour coordinates pickup, meeting point, and on-road help. */
+  assistanceIncluded?: boolean;
+}
+
+export type TransportBookingStatus =
+  | "pending_confirmation"
+  | "confirmed"
+  | "in_transit"
+  | "completed"
+  | "cancelled"
+  | "declined";
+
+export type TransportBookingSource = "standalone" | "add_on" | "included_upgrade";
+
+export interface TransportBooking {
+  id: string;
+  reference: string;
+  userId: string;
+  customerName: string;
+  routeId: string;
+  routeType: TransportRoute["type"];
+  origin: string;
+  destination: string;
+  operator: string;
+  travelDate: string;
+  passengers: number;
+  amountUsd: number;
+  status: TransportBookingStatus;
+  fulfillmentType: "instant" | "on_request";
+  source: TransportBookingSource;
+  linkedTourBookingRef?: string;
+  linkedTourId?: string;
+  /** Company arranges pickup and helps travelers move door-to-door. */
+  coordinatedByCompany: boolean;
+  pickupLocation?: string;
+  pickupTime?: string;
+  meetingPoint?: string;
+  assistanceNotes?: string;
+  driverName?: string;
+  driverPhone?: string;
+  createdAt: string;
+  confirmedAt?: string;
+  declinedReason?: string;
+  paymentStatus: PaymentStatus;
+}
+
+export interface TransportSearchQuery {
+  origin?: string;
+  destination?: string;
+  originDestinationId?: string;
+  destinationDestinationId?: string;
+  travelDate: string;
+  passengers: number;
+  type?: TransportRoute["type"];
+}
+
+/** Ground/air segment between two itinerary stops on a tour. */
+export interface TourItineraryLeg {
+  id: string;
+  tourId: string;
+  fromStopId: string;
+  toStopId: string;
+  fromName: string;
+  toName: string;
+  travelDate: string;
+  defaultRouteId?: string;
+  includedInPackage: boolean;
+  notes?: string;
+}
+
+/** Transfers bundled with a tour — included or upgradeable. */
+export interface TourIncludedTransfer {
+  id: string;
+  tourId: string;
+  dayLabel: string;
+  legLabel: string;
+  routeId?: string;
+  routeType: TransportRoute["type"];
+  included: boolean;
+  upgradeRouteId?: string;
+  upgradePriceUsd?: number;
+  assistanceNotes?: string;
 }
 
 export interface AttractionTicket {

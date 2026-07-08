@@ -19,7 +19,8 @@ export type AdminSection =
   | "users"
   | "settings"
   | "partner_inventory"
-  | "custom_tours";
+  | "custom_tours"
+  | "travel_bookings";
 
 const ROLE_SECTIONS: Record<UserRole, AdminSection[] | "*"> = {
   admin: "*",
@@ -29,7 +30,9 @@ const ROLE_SECTIONS: Record<UserRole, AdminSection[] | "*"> = {
     "payments",
     "tours",
     "custom_tours",
+    "travel_bookings",
     "hotels",
+    "transport",
     "customers",
     "support",
   ],

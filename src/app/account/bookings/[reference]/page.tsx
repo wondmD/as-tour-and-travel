@@ -38,6 +38,13 @@ export default function BookingDetailPage() {
         actions={
           <>
             <Link
+              href={`/transport?travelDate=${booking.departureDate}&passengers=${booking.travelerCount}&tourRef=${booking.reference}&tourId=${booking.tourId}`}
+            >
+              <Button variant="soft" size="sm">
+                Arrange transfers
+              </Button>
+            </Link>
+            <Link
               href={`/hotels?checkIn=${booking.departureDate}&guests=${booking.travelerCount}&tourRef=${booking.reference}`}
             >
               <Button variant="soft" size="sm">
