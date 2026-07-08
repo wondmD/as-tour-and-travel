@@ -46,6 +46,15 @@ export default function AdminToursPage() {
     },
     { accessorKey: "destination", header: "Destination" },
     {
+      accessorKey: "tourType",
+      header: "Type",
+      cell: ({ row }) => (
+        <Badge variant={row.original.tourType === "private" ? "neutral" : "primary"}>
+          {row.original.tourType.replace(/_/g, " ")}
+        </Badge>
+      ),
+    },
+    {
       accessorKey: "basePriceUsd",
       header: "From",
       cell: ({ row }) => formatUsd(row.original.basePriceUsd),
@@ -160,7 +169,7 @@ export default function AdminToursPage() {
         description="Track income, expenses, budgets, and profit/loss for every tour package."
         actions={
           canEdit && (
-            <Button size="sm" onClick={() => toast.info("Tour builder — mock")}>
+            <Button size="sm" onClick={() => router.push("/admin/tours/new")}>
               New tour
             </Button>
           )

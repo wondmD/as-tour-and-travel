@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { PageHeader } from "@/components/dashboard";
 import { BookingDetail } from "@/components/travel/BookingDetail";
@@ -36,6 +37,13 @@ export default function BookingDetailPage() {
         description={booking.tourTitle}
         actions={
           <>
+            <Link
+              href={`/hotels?checkIn=${booking.departureDate}&guests=${booking.travelerCount}&tourRef=${booking.reference}`}
+            >
+              <Button variant="soft" size="sm">
+                Add hotel nights
+              </Button>
+            </Link>
             <Button variant="secondary" size="sm" onClick={() => toast.info("Invoice download — mock PDF")}>
               Download invoice
             </Button>

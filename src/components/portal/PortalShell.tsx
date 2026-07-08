@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Bell,
   BookOpen,
+  BedDouble,
   CalendarCheck,
   Compass,
   Heart,
@@ -13,6 +14,7 @@ import {
   Map,
   Settings,
   User,
+  Wand2,
 } from "lucide-react";
 import { type ReactNode } from "react";
 import { Logo } from "@/components/brand/Logo";
@@ -34,6 +36,9 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Overview", href: "/account", icon: LayoutDashboard, matchNested: false },
       { label: "My bookings", href: "/account/bookings", icon: CalendarCheck, badge: 2 },
+      { label: "Hotel stays", href: "/account/hotels", icon: BedDouble },
+      { label: "Custom tours", href: "/account/custom-tours", icon: Wand2 },
+      { label: "Tour memories", href: "/account/memories", icon: BookOpen },
       { label: "My trips", href: "/account/trips", icon: Map },
       { label: "Wishlist", href: "/account/wishlist", icon: Heart },
       { label: "Travel journal", href: "/account/journal", icon: BookOpen },
@@ -53,6 +58,9 @@ const NAV_GROUPS: NavGroup[] = [
 const CRUMB_LABELS: Record<string, string> = {
   account: "My account",
   bookings: "Bookings",
+  hotels: "Hotel stays",
+  "custom-tours": "Custom tours",
+  memories: "Memories",
   trips: "Trips",
   wishlist: "Wishlist",
   journal: "Journal",

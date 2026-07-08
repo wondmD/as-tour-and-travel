@@ -90,6 +90,125 @@ export interface TourProduct {
   rating: number;
   reviewCount: number;
   category: string;
+  /** How the tour is sold and operated. */
+  tourType: TourType;
+}
+
+/** Group/small-group tours get shared departure memories; private tours do not. */
+export type TourType =
+  | "group_departure"
+  | "semi_private"
+  | "private"
+  | "custom";
+
+export function tourTypeSupportsMemory(tourType: TourType): boolean {
+  return tourType !== "private";
+}
+
+/** A scheduled stop on a tour route — ordered by arrival date. */
+export interface TourItineraryStop {
+  id: string;
+  destinationId: string;
+  destinationName: string;
+  country: string;
+  /** Calendar date the group arrives at this destination (YYYY-MM-DD). */
+  arrivalDate: string;
+  /** Nights spent at this stop before traveling onward. */
+  nights: number;
+  /** Day number relative to tour start (1-based). */
+  dayNumber: number;
+  notes?: string;
+  coverImage?: string;
+}
+
+/** Day-by-day route design attached to a tour product. */
+export interface TourItinerary {
+  tourId: string;
+  /** Anchor date — Day 1 reference for computing day numbers. */
+  tourStartDate: string;
+  stops: TourItineraryStop[];
+  updatedAt: string;
+}
+
+export interface CreateTourInput {
+  title: string;
+  slug: string;
+  destination: string;
+  durationDays: number;
+  basePriceUsd: number;
+  coverImage: string;
+  category: string;
+  tourType: TourType;
+  status?: TourProduct["status"];
+}
+
+export interface TourMemoryMedia {
+  id: string;
+  type: "photo" | "video";
+  url: string;
+  thumbnailUrl?: string;
+  caption?: string;
+  durationSec?: number;
+}
+
+export interface TourMemory {
+  id: string;
+  tourId: string;
+  tourTitle: string;
+  tourSlug: string;
+  departureId: string;
+  departureDate: string;
+  title: string;
+  summary?: string;
+  coverImage: string;
+  media: TourMemoryMedia[];
+  participantCount: number;
+  publishedAt: string;
+  status: "draft" | "published";
+}
+
+export type CustomTourRequestStatus =
+  | "submitted"
+  | "under_review"
+  | "confirmed"
+  | "rejected"
+  | "customized";
+
+export interface CustomTourRequest {
+  id: string;
+  reference: string;
+  userId: string;
+  customerName: string;
+  destinationIds: string[];
+  destinationNames: string[];
+  preferredStartDate?: string;
+  preferredEndDate?: string;
+  durationDays?: number;
+  travelerCount: number;
+  budgetUsd?: number;
+  notes?: string;
+  status: CustomTourRequestStatus;
+  createdAt: string;
+  updatedAt: string;
+  rejectionReason?: string;
+  assignedStaffId?: string;
+  assignedStaffName?: string;
+  createdByStaff?: boolean;
+  proposalId?: string;
+}
+
+export interface CustomTourProposal {
+  id: string;
+  requestId: string;
+  title: string;
+  itinerarySummary: string;
+  durationDays: number;
+  priceUsd: number;
+  validUntil: string;
+  notes?: string;
+  createdByName: string;
+  createdAt: string;
+  status: "pending" | "accepted" | "declined" | "expired";
 }
 
 /** Operational budget for a tour over a defined period. */
@@ -235,7 +354,7 @@ export interface AppNotification {
   body: string;
   read: boolean;
   createdAt: string;
-  category: "booking" | "payment" | "promo" | "reminder" | "system";
+  category: "booking" | "payment" | "promo" | "reminder" | "system" | "hotel";
 }
 
 export interface NotificationPreferences {
@@ -294,7 +413,19 @@ export interface Hotel {
   status: "active" | "inactive" | "pending";
   roomTypes: number;
   avgRateUsd: number;
+  kind: PropertyKind;
+  fulfillmentType: HotelFulfillmentType;
+  ownerType: HotelOwnerType;
+  description?: string;
+  amenities?: string[];
+  address?: string;
+  /** Hours to confirm for on_request properties. */
+  confirmationSlaHours?: number;
 }
+
+export type PropertyKind = "hotel" | "apartment" | "guesthouse";
+export type HotelFulfillmentType = "instant" | "allotment" | "on_request";
+export type HotelOwnerType = "as_tour" | "partner" | "external";
 
 export interface HotelRoom {
   id: string;
@@ -303,6 +434,79 @@ export interface HotelRoom {
   rateUsd: number;
   available: number;
   total: number;
+  maxGuests: number;
+  description?: string;
+  amenities?: string[];
+}
+
+/** Per-night inventory for instant / allotment properties. */
+export interface InventoryNight {
+  id: string;
+  hotelId: string;
+  roomTypeId: string;
+  date: string;
+  totalUnits: number;
+  bookedUnits: number;
+  heldUnits: number;
+}
+
+/** Accommodation bundled with a tour package. */
+export interface TourIncludedStay {
+  id: string;
+  tourId: string;
+  dayNumber: number;
+  dayLabel: string;
+  hotelId: string;
+  hotelName: string;
+  city: string;
+  roomTypeId: string;
+  roomTypeName: string;
+  nights: number;
+  upgradeRoomTypeId?: string;
+  upgradeRoomTypeName?: string;
+  upgradePriceUsd?: number;
+}
+
+export type HotelBookingStatus =
+  | "pending_confirmation"
+  | "confirmed"
+  | "declined"
+  | "cancelled"
+  | "checked_in"
+  | "completed";
+
+export type HotelBookingSource = "standalone" | "add_on" | "included_upgrade";
+
+export interface HotelBooking {
+  id: string;
+  reference: string;
+  userId: string;
+  customerName: string;
+  hotelId: string;
+  hotelName: string;
+  roomTypeId: string;
+  roomTypeName: string;
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+  nights: number;
+  amountUsd: number;
+  status: HotelBookingStatus;
+  fulfillmentType: HotelFulfillmentType;
+  source: HotelBookingSource;
+  linkedTourBookingRef?: string;
+  createdAt: string;
+  confirmedAt?: string;
+  declinedReason?: string;
+  paymentStatus: PaymentStatus;
+}
+
+export interface HotelSearchQuery {
+  city?: string;
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+  instantOnly?: boolean;
 }
 
 export interface TransportRoute {

@@ -8,35 +8,53 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Input,
+  Label,
   Progress,
   Skeleton,
   toast,
 } from "@/components/ui";
-import { usePartnerRooms } from "@/lib/hooks/use-travel-data";
+import { HotelFulfillmentBadge } from "@/components/hotel/HotelBadges";
+import {
+  useHotelProperty,
+  usePartnerRooms,
+  useUpdateRoomInventory,
+} from "@/lib/hooks/use-hotel-data";
 import { useSession } from "@/lib/stores/auth";
 
-/** Partner portal — hotel inventory management (role: partner). */
+const PARTNER_HOTEL_ID = "htl-1";
+
+/** Partner portal — room inventory for contracted properties. */
 export default function PartnerInventoryPage() {
   const session = useSession();
   const partnerId = session?.user.id;
   const partnerName = session?.user.partnerName ?? "Partner property";
+  const { data: property, isLoading: propLoading } = useHotelProperty(PARTNER_HOTEL_ID);
   const { data: rooms, isLoading } = usePartnerRooms(partnerId);
+  const updateRoom = useUpdateRoomInventory();
 
   return (
     <>
       <PageHeader
         title={partnerName}
-        description="Manage room inventory, rates, and availability for your property."
+        description="Update room availability for your contracted allotment — travelers get instant confirmation while units remain."
         actions={
           <Button size="sm" onClick={() => toast.info("Rate calendar — mock")}>
-            Update rates
+            Bulk rate update
           </Button>
         }
       />
+
+      {property?.hotel && (
+        <div className="mb-4">
+          <HotelFulfillmentBadge type={property.hotel.fulfillmentType} />
+        </div>
+      )}
+
       <div className="grid gap-4 md:grid-cols-3">
-        {isLoading
+        {isLoading || propLoading
           ? Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="h-40 rounded-2xl" />
+              <Skeleton key={i} className="h-48 rounded-2xl" />
             ))
           : rooms?.map((room) => (
               <Card key={room.id} static>
@@ -50,15 +68,27 @@ export default function PartnerInventoryPage() {
                     label={`${room.available} rooms available`}
                     showValue
                   />
-                  <Button
-                    className="mt-3"
-                    size="sm"
-                    variant="soft"
-                    fullWidth
-                    onClick={() => toast.info("Inventory editor — mock")}
-                  >
-                    Edit inventory
-                  </Button>
+                  <div className="mt-3 space-y-2">
+                    <Label htmlFor={`p-${room.id}`} className="text-xs">
+                      Available units
+                    </Label>
+                    <Input
+                      id={`p-${room.id}`}
+                      type="number"
+                      defaultValue={room.available}
+                      onBlur={(e) => {
+                        const v = Number(e.target.value);
+                        if (!Number.isNaN(v)) {
+                          updateRoom.mutate({
+                            roomId: room.id,
+                            hotelId: PARTNER_HOTEL_ID,
+                            patch: { available: v },
+                          });
+                          toast.success("Allotment updated");
+                        }
+                      }}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             ))}

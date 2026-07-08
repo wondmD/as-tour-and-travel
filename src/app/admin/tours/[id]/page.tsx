@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import {
   ArrowLeft,
+  Sparkles,
 } from "lucide-react";
 import { PageHeader } from "@/components/dashboard";
 import { TourBudgetEditor } from "@/components/admin/tour/TourBudgetEditor";
@@ -250,18 +251,28 @@ export default function AdminTourDetailPage() {
               <ArrowLeft className="size-4" /> All tours
             </Button>
             {canEditTour && (
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => {
-                  const next =
-                    tour.status === "published" ? "draft" : "published";
-                  updateStatus.mutate({ id: tour.id, status: next });
-                  toast.success(`Tour ${next}`);
-                }}
-              >
-                {tour.status === "published" ? "Unpublish" : "Publish"}
-              </Button>
+              <>
+                <Button
+                  size="sm"
+                  variant="soft"
+                  href={`/admin/tours/${tour.id}/design`}
+                >
+                  <Sparkles className="size-4" />
+                  Design route
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    const next =
+                      tour.status === "published" ? "draft" : "published";
+                    updateStatus.mutate({ id: tour.id, status: next });
+                    toast.success(`Tour ${next}`);
+                  }}
+                >
+                  {tour.status === "published" ? "Unpublish" : "Publish"}
+                </Button>
+              </>
             )}
           </>
         }

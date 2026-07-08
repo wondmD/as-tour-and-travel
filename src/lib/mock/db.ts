@@ -49,6 +49,13 @@ import {
   TRIPS,
   TOUR_BUDGETS,
   TOUR_EXPENSES,
+  TOUR_INCLUDED_STAYS,
+  INVENTORY_NIGHTS,
+  HOTEL_BOOKINGS,
+  TOUR_MEMORIES,
+  CUSTOM_TOUR_REQUESTS,
+  CUSTOM_TOUR_PROPOSALS,
+  TOUR_ITINERARIES,
   WISHLIST,
 } from "./seed";
 import { computeTourFinancials } from "@/lib/tour-finance";
@@ -83,6 +90,13 @@ export const mockDb = {
   settings: clone(APP_SETTINGS),
   tourBudgets: clone(TOUR_BUDGETS),
   tourExpenses: clone(TOUR_EXPENSES),
+  tourIncludedStays: clone(TOUR_INCLUDED_STAYS),
+  inventoryNights: clone(INVENTORY_NIGHTS),
+  hotelBookings: clone(HOTEL_BOOKINGS),
+  tourMemories: clone(TOUR_MEMORIES),
+  customTourRequests: clone(CUSTOM_TOUR_REQUESTS),
+  customTourProposals: clone(CUSTOM_TOUR_PROPOSALS),
+  tourItineraries: clone(TOUR_ITINERARIES),
 };
 
 export type MockDb = typeof mockDb;
@@ -112,6 +126,13 @@ export function resetMockDb() {
   mockDb.settings = clone(APP_SETTINGS);
   mockDb.tourBudgets = clone(TOUR_BUDGETS);
   mockDb.tourExpenses = clone(TOUR_EXPENSES);
+  mockDb.tourIncludedStays = clone(TOUR_INCLUDED_STAYS);
+  mockDb.inventoryNights = clone(INVENTORY_NIGHTS);
+  mockDb.hotelBookings = clone(HOTEL_BOOKINGS);
+  mockDb.tourMemories = clone(TOUR_MEMORIES);
+  mockDb.customTourRequests = clone(CUSTOM_TOUR_REQUESTS);
+  mockDb.customTourProposals = clone(CUSTOM_TOUR_PROPOSALS);
+  mockDb.tourItineraries = clone(TOUR_ITINERARIES);
 }
 
 const delay = (ms = 280) => new Promise((r) => setTimeout(r, ms));

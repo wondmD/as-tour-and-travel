@@ -23,6 +23,7 @@ import {
   Ticket,
   User,
   Users,
+  Wand2,
 } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
 import { Logo } from "@/components/brand/Logo";
@@ -51,6 +52,7 @@ const ALL_NAV: (NavItem & { section: AdminSection })[] = [
   { label: "Bookings", href: "/admin/bookings", icon: CalendarCheck, badge: 6, section: "bookings" },
   { label: "Payments", href: "/admin/payments", icon: CreditCard, section: "payments" },
   { label: "Tours", href: "/admin/tours", icon: Compass, section: "tours" },
+  { label: "Custom tours", href: "/admin/custom-tours", icon: Wand2, badge: 2, section: "custom_tours" },
   { label: "Hotels", href: "/admin/hotels", icon: BedDouble, section: "hotels" },
   { label: "Transport", href: "/admin/transport", icon: Bus, section: "transport" },
   { label: "Tickets", href: "/admin/tickets", icon: Ticket, section: "tickets" },
@@ -68,7 +70,7 @@ const ALL_NAV: (NavItem & { section: AdminSection })[] = [
 
 const NAV_GROUPS_META = [
   { label: undefined, sections: ["overview", "bookings", "payments"] as AdminSection[] },
-  { label: "Catalog", sections: ["tours", "hotels", "transport", "tickets", "destinations", "partner_inventory"] as AdminSection[] },
+  { label: "Catalog", sections: ["tours", "custom_tours", "hotels", "transport", "tickets", "destinations", "partner_inventory"] as AdminSection[] },
   { label: "Growth", sections: ["promotions", "reviews", "blog", "reports"] as AdminSection[] },
   { label: "Operations", sections: ["customers", "support", "users", "settings"] as AdminSection[] },
 ];
@@ -78,6 +80,7 @@ const CRUMB_LABELS: Record<string, string> = {
   bookings: "Bookings",
   payments: "Payments",
   tours: "Tours",
+  "custom-tours": "Custom tours",
   hotels: "Hotels",
   transport: "Transport",
   tickets: "Tickets",
@@ -91,6 +94,9 @@ const CRUMB_LABELS: Record<string, string> = {
   users: "Users",
   partner: "Partner",
   settings: "Settings",
+  confirmations: "Confirmations",
+  design: "Design route",
+  new: "New tour",
 };
 
 function useCrumbs() {
