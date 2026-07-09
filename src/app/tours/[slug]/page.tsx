@@ -7,8 +7,8 @@ import { TourHero } from "@/components/tour/TourHero";
 import { TourRouteExplorer } from "@/components/tour/TourRouteExplorer";
 import { BookingCTA } from "@/components/tour/BookingCTA";
 import { TourPageEnhancements } from "@/components/tour/TourPageEnhancements";
-import { TourIncludedAccommodation } from "@/components/hotel/TourIncludedAccommodation";
-import { TourPageExtras } from "@/components/tour/TourPageExtras";
+// import { TourIncludedAccommodation } from "@/components/hotel/TourIncludedAccommodation";
+// import { TourPageExtras } from "@/components/tour/TourPageExtras";
 import { tour001 } from "@/data/tour-001";
 import { createPageMetadata, createTourMetadata, tourJsonLd } from "@/lib/seo";
 
@@ -46,8 +46,8 @@ export default async function TourPage({ params }: TourPageProps) {
       <main className="tour-page-main">
         <TourHero tour={tour001} />
         <TourRouteExplorer destinations={tour001.destinations} />
-        <TourPageExtras tourId="tour-001" tourSlug="tour-001" tourType="group_departure" />
-        <TourIncludedAccommodation tourId="tour-001" />
+        {/* <TourPageExtras tourId="tour-001" tourSlug="tour-001" tourType="group_departure" /> */}
+        {/* <TourIncludedAccommodation tourId="tour-001" /> */}
         <BookingCTA tour={tour001} />
         <TourPageEnhancements tour={tour001} />
       </main>
